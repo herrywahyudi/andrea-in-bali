@@ -1,0 +1,1316 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Andrea in Bali</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --sand:#F7F3EE;--ink:#0D0B0A;--terra:#C4714A;--sage:#8BA888;--gold:#D4A853;
+  --warm:#FAF8F5;--muted:#6B6560;--border:#E8E3DC;--white:#fff;
+  --serif:Georgia,'Times New Roman',serif;
+  --sans:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
+}
+html,body{height:100%;font-family:var(--sans);background:var(--warm);color:var(--ink);overflow-x:hidden}
+img{display:block;width:100%;height:100%;object-fit:cover}
+button,input,select,textarea{font-family:var(--sans)}
+
+/* LOCALE */
+#locale{position:fixed;inset:0;z-index:9999;background:var(--ink);display:flex;align-items:center;justify-content:center;transition:opacity .7s,visibility .7s}
+#locale.gone{opacity:0;visibility:hidden;pointer-events:none}
+#lbg{position:absolute;inset:0;background:url('https://images.unsplash.com/photo-1537996194471-e657df975ab4?w=1600&auto=format&fit=crop')center/cover;opacity:.28}
+#lin{position:relative;z-index:1;text-align:center;padding:2rem 1rem}
+#lin h1{font-family:var(--serif);font-size:clamp(1.5rem,4vw,2.6rem);color:var(--sand);font-weight:400;margin-bottom:.4rem}
+#lin p{color:rgba(247,243,238,.45);font-size:.85rem;letter-spacing:.08em;margin-bottom:2.8rem}
+.lcards{display:flex;gap:1rem;flex-wrap:wrap;justify-content:center;max-width:660px;margin:0 auto}
+.lcard{background:rgba(247,243,238,.07);border:1px solid rgba(247,243,238,.14);border-radius:16px;padding:1.8rem 2.2rem;cursor:pointer;transition:all .25s;color:var(--sand);text-align:center;min-width:170px}
+.lcard:hover{background:rgba(247,243,238,.15);border-color:rgba(247,243,238,.32);transform:translateY(-3px)}
+.lcard .flag{font-size:2.4rem;margin-bottom:.6rem;display:block}
+.lcard .cn{font-size:1.05rem;font-weight:500}
+.lcard .cs{font-size:.73rem;color:rgba(247,243,238,.42);margin-top:.25rem}
+
+/* NAV */
+#nav{position:fixed;top:0;left:0;right:0;z-index:500;height:62px;background:rgba(250,248,245,.94);backdrop-filter:blur(20px);border-bottom:1px solid var(--border);display:none;align-items:center;justify-content:space-between;padding:0 2rem}
+.nlogo{font-family:var(--serif);font-size:1.2rem;color:var(--ink);cursor:pointer}
+.nlogo span{color:var(--terra)}
+.nlinks{display:flex;gap:1.1rem;list-style:none;overflow:hidden}
+.nlinks a{color:var(--muted);font-size:.73rem;letter-spacing:.04em;cursor:pointer;transition:color .2s;white-space:nowrap}
+.nlinks a:hover,.nlinks a.on{color:var(--ink);font-weight:500}
+.nr{display:flex;align-items:center;gap:.6rem;flex-shrink:0}
+.lbadge{font-size:.72rem;padding:.27rem .7rem;border:1px solid var(--border);border-radius:100px;color:var(--muted);cursor:pointer;transition:all .2s;white-space:nowrap}
+.lbadge:hover{border-color:var(--terra);color:var(--terra)}
+.srchbtn{width:34px;height:34px;border:1px solid var(--border);border-radius:50%;background:none;cursor:pointer;display:flex;align-items:center;justify-content:center;color:var(--muted)}
+.srchbtn:hover{border-color:var(--terra);color:var(--terra)}
+
+/* SEARCH */
+#sovl{position:fixed;inset:0;z-index:800;background:rgba(13,11,10,.85);backdrop-filter:blur(8px);display:none;align-items:flex-start;justify-content:center;padding-top:100px}
+#sovl.on{display:flex}
+.sbox{background:var(--white);border-radius:20px;padding:2rem;width:100%;max-width:560px;margin:0 1rem;max-height:80vh;overflow-y:auto}
+.sbox h3{font-family:var(--serif);font-size:1.3rem;font-weight:400;margin-bottom:1rem}
+.sinp-row{display:flex;gap:.75rem;margin-bottom:1.5rem}
+.sinp-row input{flex:1;padding:.75rem 1rem;border:1px solid var(--border);border-radius:10px;font-size:.95rem;outline:none}
+.sinp-row input:focus{border-color:var(--terra)}
+.sresults{display:grid;gap:.6rem}
+.sres{display:flex;gap:.9rem;align-items:center;padding:.75rem;border:1px solid var(--border);border-radius:12px;cursor:pointer;transition:all .2s}
+.sres:hover{border-color:var(--terra);background:rgba(196,113,74,.04)}
+.sres-img{width:46px;height:46px;border-radius:8px;overflow:hidden;flex-shrink:0}
+.sres-info h4{font-size:.88rem;font-weight:500;margin-bottom:.1rem}
+.sres-info p{font-size:.74rem;color:var(--muted)}
+.sres-tag{font-size:.64rem;letter-spacing:.1em;text-transform:uppercase;color:var(--terra)}
+.cls-btn{float:right;background:none;border:none;cursor:pointer;font-size:1.3rem;color:var(--muted)}
+
+/* APP */
+#app{display:none;min-height:100vh;padding-top:62px}
+.pg{display:none}.pg.on{display:block}
+
+/* BUTTONS */
+.bp{display:inline-flex;align-items:center;gap:.6rem;background:var(--terra);color:var(--sand);padding:.85rem 1.9rem;border-radius:100px;font-size:.87rem;border:none;transition:all .22s;cursor:pointer}
+.bp:hover{background:#b5623d;transform:translateY(-2px)}
+.bg{display:inline-flex;align-items:center;gap:.6rem;background:transparent;color:var(--ink);padding:.8rem 1.8rem;border-radius:100px;font-size:.87rem;border:1px solid var(--border);transition:all .22s;cursor:pointer}
+.bg:hover{border-color:var(--terra);color:var(--terra)}
+.bgold{background:var(--terra);color:var(--sand);border:none;padding:.88rem 2rem;border-radius:100px;font-size:.87rem;cursor:pointer;transition:all .22s}
+.bgold:hover{background:#b5623d}
+
+/* HERO */
+.hero{height:calc(100vh - 62px);position:relative;display:flex;align-items:flex-end;padding:0 3rem 5.5rem;overflow:hidden;margin-top:-62px;padding-top:62px}
+.hbg{position:absolute;inset:0;background-size:cover;background-position:center}
+.hov{position:absolute;inset:0;background:linear-gradient(to top,rgba(13,11,10,.85) 0%,rgba(13,11,10,.12) 55%,transparent 100%)}
+.hc{position:relative;z-index:1;max-width:1160px;width:100%}
+.heye{font-size:.68rem;letter-spacing:.24em;text-transform:uppercase;color:rgba(212,168,83,.85);margin-bottom:.9rem}
+.hh{font-family:var(--serif);font-size:clamp(2.4rem,5.5vw,4.8rem);color:var(--sand);font-weight:400;line-height:1.1;margin-bottom:1.3rem;max-width:680px}
+.hsub{color:rgba(247,243,238,.6);font-size:.97rem;line-height:1.75;max-width:420px;margin-bottom:2.3rem}
+.hscroll{position:absolute;bottom:2rem;right:3rem;z-index:1;color:rgba(247,243,238,.3);font-size:.65rem;letter-spacing:.18em;text-transform:uppercase;writing-mode:vertical-rl}
+
+/* WEATHER */
+.wbar{background:rgba(13,11,10,.96);padding:.85rem 3rem;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:1rem}
+.wbar-l{display:flex;align-items:center;gap:2rem;flex-wrap:wrap}
+.wi{display:flex;align-items:center;gap:.5rem;color:rgba(247,243,238,.5);font-size:.78rem}
+.wi strong{color:var(--sand);font-weight:500}
+.sbadge{background:rgba(139,168,136,.18);border:1px solid rgba(139,168,136,.3);color:var(--sage);font-size:.7rem;padding:.25rem .7rem;border-radius:100px;letter-spacing:.08em}
+
+/* STATS */
+.sbar{background:var(--ink);padding:2rem 3rem;display:flex;justify-content:center;gap:5rem;flex-wrap:wrap}
+.sbi{text-align:center}
+.sbn{font-family:var(--serif);font-size:2rem;color:var(--sand)}
+.sbl{font-size:.7rem;letter-spacing:.13em;text-transform:uppercase;color:rgba(247,243,238,.38);margin-top:.2rem}
+
+/* SECTIONS */
+.sec{padding:5.5rem 3rem;max-width:1200px;margin:0 auto}
+.eye{font-size:.68rem;letter-spacing:.24em;text-transform:uppercase;color:var(--terra);margin-bottom:.9rem}
+.sh{font-family:var(--serif);font-size:clamp(1.8rem,3.5vw,2.9rem);font-weight:400;line-height:1.2;margin-bottom:.85rem}
+.sp{color:var(--muted);font-size:.94rem;line-height:1.78;max-width:520px;margin-bottom:2.8rem}
+
+/* ANDREA */
+.agrid{display:grid;grid-template-columns:1fr 1fr;gap:5rem;align-items:center}
+.aphoto{border-radius:24px;overflow:hidden;aspect-ratio:3/4;position:relative}
+.aptag{position:absolute;bottom:1.4rem;left:1.4rem;background:rgba(250,248,245,.93);backdrop-filter:blur(10px);padding:.65rem .95rem;border-radius:12px;font-size:.78rem;color:var(--ink)}
+.aptag strong{display:block;font-size:.95rem;font-family:var(--serif)}
+.abio{font-size:1rem;line-height:1.9;color:#3A3530}
+.abio p{margin-bottom:1.2rem}
+.hl{color:var(--terra);font-style:italic}
+
+/* MOSAIC */
+.mosaic{display:grid;grid-template-columns:repeat(3,1fr);grid-template-rows:280px 280px;gap:1rem}
+.mc{border-radius:18px;overflow:hidden;position:relative;cursor:pointer;transition:transform .3s}
+.mc:hover{transform:scale(1.02)}
+.mc img{transition:transform .5s;width:100%;height:100%;object-fit:cover}
+.mc:hover img{transform:scale(1.06)}
+.mov{position:absolute;inset:0;background:linear-gradient(to top,rgba(13,11,10,.85) 0%,transparent 55%)}
+.mcc{position:absolute;bottom:0;left:0;right:0;padding:1.3rem 1.4rem}
+.mtag{display:inline-block;background:rgba(247,243,238,.12);border:1px solid rgba(247,243,238,.18);backdrop-filter:blur(6px);color:var(--sand);font-size:.63rem;letter-spacing:.12em;text-transform:uppercase;padding:.25rem .6rem;border-radius:100px;margin-bottom:.6rem}
+.mc h3{font-family:var(--serif);font-size:1.4rem;color:var(--sand);font-weight:400;margin-bottom:.2rem}
+.mc p{color:rgba(247,243,238,.58);font-size:.78rem}
+.mc-big{grid-column:span 2;grid-row:span 2}
+
+/* CARDS */
+.cgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(290px,1fr));gap:1.4rem}
+.rvc{background:var(--white);border:1px solid var(--border);border-radius:20px;overflow:hidden;transition:transform .25s}
+.rvc:hover{transform:translateY(-4px)}
+.rvi{height:195px;overflow:hidden}
+.rvb{padding:1.4rem}
+.rvtype{font-size:.67rem;letter-spacing:.15em;text-transform:uppercase;color:var(--sage);margin-bottom:.6rem}
+.rvt{font-family:var(--serif);font-size:1.05rem;font-weight:400;margin-bottom:.5rem}
+.rvp{font-size:.82rem;color:var(--muted);line-height:1.6;margin-bottom:1rem}
+.rvv{font-size:.82rem;font-style:italic;color:var(--terra);border-top:1px solid var(--border);padding-top:.9rem}
+.rvf{display:flex;justify-content:space-between;align-items:center;margin-top:.9rem}
+.pp{display:inline-flex;align-items:center;gap:.35rem;font-size:.74rem;color:var(--muted);background:var(--sand);padding:.27rem .65rem;border-radius:100px}
+.op{font-size:.72rem;color:var(--sage)}
+
+/* BLOG */
+.bgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(295px,1fr));gap:1.4rem}
+.blc{cursor:pointer;transition:transform .25s}
+.blc:hover{transform:translateY(-4px)}
+.bli{width:100%;aspect-ratio:16/10;border-radius:14px;overflow:hidden;margin-bottom:1.1rem}
+.bli img{transition:transform .5s}
+.blc:hover .bli img{transform:scale(1.04)}
+.bltag{font-size:.66rem;letter-spacing:.15em;text-transform:uppercase;color:var(--terra);margin-bottom:.45rem}
+.blh{font-family:var(--serif);font-size:1.15rem;font-weight:400;margin-bottom:.45rem;line-height:1.4;color:var(--ink)}
+.blp{font-size:.82rem;color:var(--muted);line-height:1.6}
+.blm{font-size:.72rem;color:var(--muted);margin-top:.7rem}
+
+/* DARK CTA */
+.dcta{background:var(--ink);border-radius:28px;padding:4.5rem;display:grid;grid-template-columns:1fr 1fr;gap:4rem;align-items:center}
+.dcta h2{font-family:var(--serif);font-size:clamp(1.7rem,2.8vw,2.5rem);color:var(--sand);font-weight:400}
+.dcta p{color:rgba(247,243,238,.52);margin-top:.9rem;line-height:1.78;font-size:.92rem}
+.vgrid{display:grid;grid-template-columns:1fr 1fr;gap:.65rem}
+.vibe{background:rgba(247,243,238,.07);border:1px solid rgba(247,243,238,.11);border-radius:12px;padding:.85rem 1rem;cursor:pointer;transition:all .2s;color:rgba(247,243,238,.62);font-size:.82rem;text-align:center}
+.vibe:hover,.vibe.on{background:rgba(196,113,74,.2);border-color:var(--terra);color:var(--sand)}
+.vi{font-size:1.3rem;margin-bottom:.35rem}
+
+/* NEWSLETTER */
+.newsec{background:linear-gradient(135deg,#1a0e09 0%,#0D0B0A 100%);padding:5rem 3rem;text-align:center;position:relative;overflow:hidden}
+.newsec::before{content:'';position:absolute;inset:0;background:url('https://images.unsplash.com/photo-1555400038-63f5ba517a47?w=1200&auto=format&fit=crop&q=30')center/cover;opacity:.06}
+.news-inner{position:relative;z-index:1;max-width:560px;margin:0 auto}
+.newsec .eye{color:rgba(212,168,83,.8)}
+.newsec h2{font-family:var(--serif);font-size:clamp(1.6rem,3vw,2.4rem);color:var(--sand);font-weight:400;margin-bottom:.8rem}
+.newsec p{color:rgba(247,243,238,.5);font-size:.9rem;line-height:1.75;margin-bottom:2rem}
+.news-form{display:flex;gap:.75rem;max-width:420px;margin:0 auto;flex-wrap:wrap}
+.news-form input{flex:1;min-width:180px;padding:.85rem 1.1rem;border:1px solid rgba(247,243,238,.15);border-radius:100px;background:rgba(247,243,238,.08);color:var(--sand);font-size:.88rem;outline:none}
+.news-form input::placeholder{color:rgba(247,243,238,.3)}
+.news-form input:focus{border-color:var(--terra)}
+.news-form button{background:var(--terra);color:var(--sand);border:none;padding:.85rem 1.5rem;border-radius:100px;font-size:.87rem;cursor:pointer}
+.news-form button:hover{background:#b5623d}
+.news-perks{display:flex;justify-content:center;gap:2rem;margin-top:1.5rem;flex-wrap:wrap}
+.nperk{font-size:.75rem;color:rgba(247,243,238,.35)}
+.newsuc{display:none;color:var(--sage);font-size:.9rem;margin-top:1rem}
+
+/* PULLQUOTE */
+.pq{border-left:3px solid var(--terra);padding:1rem 1.6rem;margin:2rem 0;font-family:var(--serif);font-size:1.1rem;color:var(--terra);font-style:italic;line-height:1.6}
+
+/* DESTINATION */
+.dhero{height:68vh;position:relative;display:flex;align-items:flex-end;padding:3rem}
+.dbg{position:absolute;inset:0;background-size:cover;background-position:center}
+.dov{position:absolute;inset:0;background:linear-gradient(to top,rgba(13,11,10,.88) 0%,transparent 58%)}
+.back{color:rgba(247,243,238,.6);font-size:.78rem;cursor:pointer;display:inline-flex;align-items:center;gap:.4rem;margin-bottom:1.3rem;transition:color .2s;border:none;background:none;padding:0}
+.back:hover{color:var(--sand)}
+.dh{font-family:var(--serif);font-size:clamp(2.2rem,5vw,3.8rem);color:var(--sand);font-weight:400;margin-bottom:.4rem}
+.ds{color:rgba(247,243,238,.6);font-size:.95rem;max-width:480px}
+.dbody{max-width:1180px;margin:0 auto;padding:4rem 3rem}
+.dlayout{display:grid;grid-template-columns:1fr 340px;gap:3.5rem}
+
+/* GALLERY STRIP */
+.gal{display:grid;grid-template-columns:2fr 1fr 1fr;grid-template-rows:190px 190px;gap:.65rem;margin-bottom:2.2rem;border-radius:18px;overflow:hidden}
+.gal .g0{grid-row:span 2}
+.gal div{overflow:hidden}
+.gal div img{transition:transform .5s}
+.gal div:hover img{transform:scale(1.06)}
+
+/* OPINION */
+.opinion{background:var(--white);border:1px solid var(--border);border-radius:18px;padding:1.8rem;margin-bottom:2rem}
+.opinion p{font-size:.96rem;line-height:1.85;color:#3A3530}
+.opinion p+p{margin-top:1rem}
+
+/* TABS */
+.tabs{display:flex;border-bottom:1px solid var(--border);margin-bottom:2.2rem}
+.tab{padding:.7rem 1.2rem;font-size:.82rem;cursor:pointer;border-bottom:2px solid transparent;color:var(--muted);transition:all .2s;margin-bottom:-1px;background:none;border-top:none;border-left:none;border-right:none}
+.tab.on{color:var(--ink);border-bottom-color:var(--ink)}
+
+/* THINGS */
+.tlist{list-style:none}
+.ti{display:flex;gap:.9rem;padding:1.15rem 0;border-bottom:1px solid var(--border);align-items:flex-start}
+.ti:last-child{border:none}
+.tnum{min-width:30px;height:30px;background:var(--sand);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:.75rem;color:var(--muted);flex-shrink:0;margin-top:2px}
+.ti h4{font-size:.93rem;margin-bottom:.2rem;font-weight:500}
+.ti p{font-size:.8rem;color:var(--muted);line-height:1.55}
+
+/* SIDEBAR */
+.sbc{background:var(--white);border:1px solid var(--border);border-radius:18px;padding:1.4rem;margin-bottom:1.1rem}
+.sbc h4{font-size:.72rem;letter-spacing:.13em;text-transform:uppercase;color:var(--muted);margin-bottom:.9rem}
+.ir{display:flex;justify-content:space-between;padding:.55rem 0;border-bottom:1px solid var(--border);font-size:.83rem}
+.ir:last-child{border:none}
+.ir span:last-child{color:var(--muted)}
+.dkc{background:var(--ink)!important;border-color:transparent!important}
+.dkc h4{color:rgba(247,243,238,.45)!important}
+.dkc p{font-size:.82rem;color:rgba(247,243,238,.55);margin-bottom:.9rem;line-height:1.6}
+.nearby{display:flex;gap:.75rem;flex-wrap:wrap;margin-top:.5rem}
+.nbchip{background:var(--sand);border:1px solid var(--border);border-radius:100px;padding:.35rem .85rem;font-size:.78rem;cursor:pointer;transition:all .2s;color:var(--muted)}
+.nbchip:hover{border-color:var(--terra);color:var(--terra)}
+
+/* MAP */
+.mapsec{background:var(--ink);padding:5.5rem 3rem}
+.mapsec .eye{color:rgba(212,168,83,.8)}
+.mapsec .sh{color:var(--sand)}
+.mapsec .sp{color:rgba(247,243,238,.42);margin:0 auto 2.5rem;text-align:center}
+.mapwrap{position:relative;max-width:1100px;margin:0 auto;border-radius:20px;overflow:hidden}
+.mapwrap img{opacity:.65;height:420px}
+.pin{position:absolute;cursor:pointer;transform:translate(-50%,-100%);transition:transform .2s}
+.pin:hover{transform:translate(-50%,-100%) scale(1.2)}
+.pdot{width:12px;height:12px;background:var(--terra);border-radius:50%;border:2px solid var(--sand);box-shadow:0 0 0 4px rgba(196,113,74,.3);margin:0 auto}
+.plbl{background:rgba(250,248,245,.95);color:var(--ink);font-size:.68rem;padding:.28rem .6rem;border-radius:6px;white-space:nowrap;text-align:center;margin-bottom:5px;box-shadow:0 2px 8px rgba(0,0,0,.2)}
+
+/* CURRENCY */
+.conv-wrap{background:var(--white);border:1px solid var(--border);border-radius:24px;padding:2.5rem;max-width:520px;margin:0 auto}
+.conv-title{font-family:var(--serif);font-size:1.5rem;font-weight:400;margin-bottom:.4rem}
+.conv-sub{font-size:.85rem;color:var(--muted);margin-bottom:2rem}
+.conv-row{display:flex;gap:1rem;align-items:flex-end;flex-wrap:wrap;margin-bottom:1rem}
+.conv-field{flex:1;min-width:140px}
+.conv-field label{display:block;font-size:.72rem;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-bottom:.4rem}
+.conv-field input{width:100%;padding:.9rem 1rem;border:1.5px solid var(--border);border-radius:12px;font-size:1.1rem;font-weight:500;color:var(--ink);background:var(--warm);outline:none;transition:border-color .2s}
+.conv-field input:focus{border-color:var(--terra)}
+.conv-arrow{font-size:1.4rem;color:var(--terra);padding-bottom:.8rem}
+.cur-btns{display:flex;gap:.5rem;flex-wrap:wrap;margin-bottom:1.5rem}
+.cbtn{padding:.5rem 1rem;font-size:.78rem;border-radius:100px;cursor:pointer;transition:all .2s}
+.cbtn.on{background:var(--terra);color:var(--sand);border:none}
+.cbtn.off{background:var(--sand);border:1px solid var(--border);color:var(--muted)}
+.cbtn.off:hover{border-color:var(--terra);color:var(--terra)}
+.rate-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:.75rem;margin-top:1.5rem;padding-top:1.5rem;border-top:1px solid var(--border)}
+.rate-card{background:var(--sand);border-radius:12px;padding:.9rem;text-align:center}
+.rc-flag{font-size:1.1rem;margin-bottom:.3rem}
+.rc-lbl{font-size:.68rem;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin-bottom:.3rem}
+.rc-val{font-family:var(--serif);font-size:1.1rem;color:var(--ink)}
+.conv-note{font-size:.72rem;color:var(--muted);margin-top:1rem;text-align:center}
+
+/* PACKING */
+.pack-progress{background:var(--white);border:1px solid var(--border);border-radius:18px;padding:1.4rem 1.8rem;margin-bottom:1.5rem;display:flex;align-items:center;gap:1.5rem}
+.pack-pct{font-family:var(--serif);font-size:2rem;color:var(--terra);font-weight:400;flex-shrink:0}
+.pack-bar-wrap{flex:1}
+.pack-bar-bg{background:var(--border);border-radius:100px;height:6px;overflow:hidden;margin-bottom:.35rem}
+.pack-bar-fill{background:var(--terra);height:100%;border-radius:100px;transition:width .3s ease}
+.pack-count{font-size:.78rem;color:var(--muted)}
+.pack-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:1.2rem}
+.pack-cat{background:var(--white);border:1px solid var(--border);border-radius:18px;padding:1.5rem}
+.pack-cat h3{font-size:.85rem;font-weight:600;margin-bottom:1rem}
+.pack-items{list-style:none}
+.pack-item{display:flex;align-items:center;gap:.75rem;padding:.55rem 0;border-bottom:1px solid var(--border);cursor:pointer;font-size:.85rem;color:var(--muted);transition:color .2s}
+.pack-item:last-child{border:none}
+.pack-item:hover{color:var(--ink)}
+.pack-item.done{text-decoration:line-through;opacity:.45}
+.pchk{width:18px;height:18px;border:1.5px solid var(--border);border-radius:4px;flex-shrink:0;transition:all .2s;background:var(--white);position:relative}
+.pack-item.done .pchk{background:var(--sage);border-color:var(--sage)}
+.pack-item.done .pchk::after{content:'✓';position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);font-size:.7rem;color:white;font-weight:700}
+
+/* GEMS */
+.gems-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:1.4rem}
+.gem{background:var(--white);border:1px solid var(--border);border-radius:20px;overflow:hidden;transition:transform .25s}
+.gem:hover{transform:translateY(-4px)}
+.gem-img{height:200px;overflow:hidden;position:relative}
+.gem-img img{transition:transform .5s}
+.gem:hover .gem-img img{transform:scale(1.05)}
+.gem-secret{position:absolute;top:1rem;left:1rem;background:var(--ink);color:var(--gold);font-size:.65rem;letter-spacing:.15em;text-transform:uppercase;padding:.28rem .65rem;border-radius:100px}
+.gem-body{padding:1.4rem}
+.gem-loc{font-size:.7rem;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin-bottom:.5rem}
+.gem-title{font-family:var(--serif);font-size:1.05rem;font-weight:400;margin-bottom:.5rem}
+.gem-desc{font-size:.82rem;color:var(--muted);line-height:1.6;margin-bottom:1rem}
+.gem-andrea{font-size:.82rem;font-style:italic;color:var(--terra);border-top:1px solid var(--border);padding-top:.9rem}
+
+/* PHOTO GALLERY */
+.photo-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:.5rem}
+.photo-item{overflow:hidden;border-radius:4px;cursor:pointer;transition:transform .3s;aspect-ratio:1}
+.photo-item:hover{transform:scale(1.02)}
+.photo-item img{transition:transform .5s}
+.photo-item:hover img{transform:scale(1.06)}
+.photo-item.tall{grid-row:span 2;aspect-ratio:auto}
+.photo-item.wide{grid-column:span 2;aspect-ratio:2/1}
+#lb{display:none;position:fixed;inset:0;z-index:900;background:rgba(13,11,10,.95);align-items:center;justify-content:center;flex-direction:column;gap:1rem}
+#lb.on{display:flex}
+#lb img{max-width:90vw;max-height:80vh;object-fit:contain;border-radius:8px}
+#lb-cap{color:rgba(247,243,238,.5);font-size:.85rem}
+.lb-close{position:absolute;top:1.5rem;right:1.5rem;background:none;border:none;color:rgba(247,243,238,.5);font-size:2rem;cursor:pointer}
+
+/* OPEN NOW */
+.open-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:1rem}
+.open-card{background:var(--white);border:1px solid var(--border);border-radius:16px;padding:1.3rem;display:flex;gap:1rem;align-items:flex-start}
+.open-ico{width:42px;height:42px;border-radius:10px;background:var(--sand);display:flex;align-items:center;justify-content:center;font-size:1.2rem;flex-shrink:0}
+.open-info h4{font-size:.9rem;font-weight:500;margin-bottom:.2rem}
+.open-info p{font-size:.78rem;color:var(--muted)}
+.open-badge{display:inline-flex;align-items:center;gap:.3rem;font-size:.7rem;margin-top:.4rem;padding:.2rem .6rem;border-radius:100px}
+.open-badge.yes{background:rgba(139,168,136,.15);color:var(--sage)}
+.open-badge.no{background:rgba(196,113,74,.12);color:var(--terra)}
+.open-badge::before{content:'●';font-size:.5rem}
+
+/* PLAN */
+.planwrap{max-width:820px;margin:0 auto;padding:4rem 3rem}
+.planhd h1{font-family:var(--serif);font-size:2.5rem;font-weight:400;margin-bottom:.5rem}
+.planhd p{color:var(--muted);line-height:1.75;font-size:.95rem;margin-bottom:3rem}
+.psec{margin-bottom:2.5rem}
+.psec h3{font-size:.77rem;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin-bottom:1rem}
+.ogrid{display:grid;grid-template-columns:1fr 1fr;gap:.85rem}
+.opt{border:1.5px solid var(--border);border-radius:14px;padding:1.3rem;cursor:pointer;transition:all .2s;background:var(--white)}
+.opt:hover,.opt.on{border-color:var(--terra);background:rgba(196,113,74,.04)}
+.oico{font-size:1.6rem;margin-bottom:.6rem}
+.opt h3{font-size:.93rem;margin-bottom:.2rem;font-weight:500}
+.opt p{font-size:.78rem;color:var(--muted)}
+.durrow{display:flex;gap:.6rem;flex-wrap:wrap}
+.dur{padding:.62rem 1.1rem;border:1px solid var(--border);border-radius:100px;font-size:.82rem;cursor:pointer;transition:all .2s;color:var(--muted);background:var(--white)}
+.dur.on{border-color:var(--terra);color:var(--terra);background:rgba(196,113,74,.06)}
+.vrow{display:flex;gap:.6rem;flex-wrap:wrap}
+.vch{padding:.6rem 1rem;border:1px solid var(--border);border-radius:100px;font-size:.8rem;cursor:pointer;transition:all .2s;color:var(--muted);background:var(--white)}
+.vch.on{border-color:var(--terra);color:var(--terra);background:rgba(196,113,74,.06)}
+.srow{display:flex;align-items:center;gap:1rem;margin-top:.9rem}
+.srow input[type=range]{flex:1}
+#bval{font-size:1.05rem;font-weight:500;min-width:65px;text-align:right}
+#bhint{font-size:.77rem;color:var(--muted);margin-top:.6rem}
+#itinbox{display:none;margin-top:2.5rem;padding:2.2rem;background:var(--white);border:1px solid var(--border);border-radius:18px}
+.iday{display:flex;gap:1.4rem;padding:1.1rem 0;border-bottom:1px solid var(--border)}
+.iday:last-child{border:none}
+.idl{min-width:65px;font-size:.67rem;letter-spacing:.1em;text-transform:uppercase;color:var(--terra);padding-top:3px}
+.iday h4{font-family:var(--serif);font-size:1rem;font-weight:400;margin-bottom:.3rem}
+.iday p{font-size:.82rem;color:var(--muted);line-height:1.55}
+.anote{margin-top:1.8rem;padding:1.3rem 1.5rem;background:var(--sand);border-radius:12px;font-size:.87rem;line-height:1.7;color:#3A3530}
+
+/* POST */
+.phero{height:52vh;position:relative}
+.pwrap{max-width:660px;margin:0 auto;padding:3.5rem 2rem}
+.pwrap h1{font-family:var(--serif);font-size:clamp(1.7rem,3.5vw,2.6rem);font-weight:400;margin-bottom:.9rem;line-height:1.25}
+.pmeta{display:flex;gap:.9rem;color:var(--muted);font-size:.74rem;margin-bottom:2.2rem;padding-bottom:1.8rem;border-bottom:1px solid var(--border);flex-wrap:wrap}
+.pwrap p{font-size:1rem;line-height:1.9;color:#3A3530;margin-bottom:1.4rem}
+.pwrap h2{font-family:var(--serif);font-size:1.45rem;font-weight:400;margin:2.2rem 0 .9rem}
+.post-share{display:flex;align-items:center;gap:.75rem;margin-top:2.5rem;padding-top:2rem;border-top:1px solid var(--border);flex-wrap:wrap}
+.post-share p{font-size:.82rem;color:var(--muted)}
+.share-btn{padding:.5rem 1.1rem;border:1px solid var(--border);border-radius:100px;font-size:.78rem;cursor:pointer;background:var(--white);color:var(--muted)}
+.share-btn:hover{border-color:var(--terra);color:var(--terra)}
+
+/* ABOUT */
+.abodyw{max-width:760px;margin:0 auto;padding:4rem 2.5rem}
+.abodyw h2{font-family:var(--serif);font-size:1.55rem;font-weight:400;margin:2rem 0 1rem}
+.abodyw p{font-size:1rem;line-height:1.9;color:#3A3530;margin-bottom:1.3rem}
+.ainline{width:100%;aspect-ratio:16/9;border-radius:16px;overflow:hidden;margin:2rem 0}
+
+/* GUIDE */
+.ghero{height:52vh;position:relative}
+.guidebody{max-width:820px;margin:0 auto;padding:3.5rem 2.5rem}
+.guidebody h2{font-family:var(--serif);font-size:1.55rem;font-weight:400;margin:2.2rem 0 .9rem}
+.guidebody p{font-size:1rem;line-height:1.9;color:#3A3530;margin-bottom:1.3rem}
+.gtips{display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin:2rem 0}
+.gtip{background:var(--white);border:1px solid var(--border);border-radius:14px;padding:1.2rem}
+.gtip h4{font-size:.9rem;font-weight:500;margin-bottom:.4rem}
+.gtip p{font-size:.8rem;color:var(--muted);line-height:1.55}
+.gtip-ico{font-size:1.4rem;margin-bottom:.5rem}
+.byg-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:1.2rem}
+.byg-item{background:var(--white);border:1px solid var(--border);border-radius:16px;padding:1.4rem;display:flex;gap:1rem;align-items:flex-start}
+.byg-num{min-width:32px;height:32px;background:var(--terra);color:var(--sand);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:.8rem;font-weight:600;flex-shrink:0}
+.byg-item h4{font-size:.9rem;font-weight:500;margin-bottom:.3rem}
+.byg-item p{font-size:.8rem;color:var(--muted);line-height:1.55}
+
+/* EXP */
+.expgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:1.4rem}
+.expc{background:var(--white);border:1px solid var(--border);border-radius:18px;overflow:hidden;cursor:pointer;transition:transform .25s}
+.expc:hover{transform:translateY(-4px)}
+.expi{height:200px;overflow:hidden}
+.expb{padding:1.3rem}
+.exptag{font-size:.66rem;letter-spacing:.14em;text-transform:uppercase;color:var(--sage);margin-bottom:.45rem}
+.exptit{font-family:var(--serif);font-size:1.05rem;font-weight:400;margin-bottom:.45rem}
+.expdesc{font-size:.8rem;color:var(--muted);line-height:1.55;margin-bottom:1rem}
+.expft{display:flex;justify-content:space-between;align-items:center}
+
+/* FAQ */
+.faqlist{list-style:none}
+.faq{border-bottom:1px solid var(--border);padding:1.3rem 0;cursor:pointer}
+.faq:last-child{border:none}
+.faq-q{display:flex;justify-content:space-between;align-items:center;font-size:.95rem;font-weight:500}
+.faq-a{font-size:.87rem;color:var(--muted);line-height:1.7;margin-top:.8rem;display:none}
+.faq.open .faq-a{display:block}
+.farr{transition:transform .25s;color:var(--terra);font-size:1.1rem}
+.faq.open .farr{transform:rotate(180deg)}
+
+/* CONTACT */
+.cwrap{max-width:700px;margin:0 auto;padding:4rem 2.5rem}
+.cwrap h1{font-family:var(--serif);font-size:2.4rem;font-weight:400;margin-bottom:.6rem}
+.copts{display:grid;grid-template-columns:1fr 1fr;gap:1.1rem;margin-bottom:2.5rem}
+.co{background:var(--white);border:1px solid var(--border);border-radius:18px;padding:1.6rem;text-align:center;transition:all .25s;cursor:pointer}
+.co:hover{border-color:var(--terra);transform:translateY(-3px)}
+.coico{font-size:2rem;margin-bottom:.75rem}
+.co h3{font-size:.95rem;margin-bottom:.3rem}
+.co p{font-size:.78rem;color:var(--muted)}
+.ff{margin-bottom:1.3rem}
+.ff label{display:block;font-size:.77rem;letter-spacing:.06em;color:var(--muted);margin-bottom:.4rem}
+.ff input,.ff textarea,.ff select{width:100%;padding:.75rem 1rem;border:1px solid var(--border);border-radius:10px;font-size:.9rem;color:var(--ink);background:var(--white);transition:border-color .2s;outline:none}
+.ff input:focus,.ff textarea:focus,.ff select:focus{border-color:var(--terra)}
+.ff textarea{height:130px;resize:vertical}
+.fsuc{display:none;background:rgba(139,168,136,.12);border:1px solid rgba(139,168,136,.3);border-radius:12px;padding:1.3rem;font-size:.9rem;color:#4a6b48;margin-top:1rem}
+
+/* FOOTER */
+footer{background:var(--ink);padding:4.5rem 3rem 2rem}
+.fgrid{display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:3rem;margin-bottom:3rem}
+.fbrand{font-family:var(--serif);font-size:1.2rem;color:var(--sand);margin-bottom:.8rem}
+.fbrand span{color:var(--terra)}
+.fdesc{color:rgba(247,243,238,.38);font-size:.82rem;line-height:1.7;max-width:260px}
+.fcol h4{color:var(--sand);font-size:.7rem;letter-spacing:.14em;text-transform:uppercase;margin-bottom:1rem}
+.fcol a{display:block;color:rgba(247,243,238,.36);font-size:.82rem;margin-bottom:.55rem;transition:color .2s;cursor:pointer}
+.fcol a:hover{color:rgba(247,243,238,.75)}
+.fsocial{display:flex;gap:.75rem;margin-top:1.5rem}
+.fsoc{width:36px;height:36px;border:1px solid rgba(247,243,238,.12);border-radius:50%;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:all .2s;font-size:.85rem;color:rgba(247,243,238,.4)}
+.fsoc:hover{border-color:var(--terra);color:var(--terra)}
+.fbot{border-top:1px solid rgba(247,243,238,.07);padding-top:1.5rem;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:.5rem}
+.fbot p{color:rgba(247,243,238,.2);font-size:.72rem}
+
+/* WA */
+.wa{position:fixed;bottom:1.8rem;right:1.8rem;z-index:400;width:54px;height:54px;border-radius:50%;background:#25D366;display:flex;align-items:center;justify-content:center;cursor:pointer;box-shadow:0 4px 18px rgba(37,211,102,.4);transition:transform .2s;border:none}
+.wa:hover{transform:scale(1.1)}
+.wa svg{width:27px;height:27px;fill:#fff}
+
+/* MOBILE NAV */
+.mnav{display:none;position:fixed;bottom:0;left:0;right:0;background:rgba(250,248,245,.96);backdrop-filter:blur(18px);border-top:1px solid var(--border);z-index:400;padding:.4rem 0 calc(.4rem + env(safe-area-inset-bottom))}
+.minner{display:flex;justify-content:space-around}
+.mni{display:flex;flex-direction:column;align-items:center;gap:.2rem;font-size:.6rem;color:var(--muted);cursor:pointer;padding:.4rem .6rem;transition:color .2s;border:none;background:none}
+.mni.on{color:var(--terra)}
+.mni svg{width:21px;height:21px}
+
+@media(max-width:960px){
+  .agrid,.dcta,.dlayout{grid-template-columns:1fr;gap:2.2rem}
+  .dcta{padding:3rem 2rem}
+  .mosaic{grid-template-columns:1fr 1fr;grid-template-rows:auto}
+  .mc-big{grid-column:span 2;aspect-ratio:16/9;grid-row:span 1}
+  .mc{aspect-ratio:4/3}
+  .gal{grid-template-columns:1fr 1fr;grid-template-rows:auto}
+  .gal .g0{grid-row:span 1}.gal div{aspect-ratio:4/3}
+  .fgrid{grid-template-columns:1fr 1fr;gap:2rem}
+  .nlinks{display:none}
+  .mnav{display:block}
+  #app{padding-bottom:60px}
+  .copts,.ogrid{grid-template-columns:1fr}
+  .gtips,.byg-grid{grid-template-columns:1fr}
+  .photo-grid{grid-template-columns:repeat(2,1fr)}
+  .photo-item.wide{grid-column:span 2}
+  .rate-grid{grid-template-columns:repeat(2,1fr)}
+  .conv-row{flex-direction:column}
+}
+@media(max-width:600px){
+  .sec,.planwrap,.pwrap,.abodyw,.cwrap,.dbody,.guidebody{padding-left:1.4rem;padding-right:1.4rem}
+  .sbar,.wbar,.newsec,.mapsec{padding-left:1.4rem;padding-right:1.4rem}
+  footer{padding-left:1.4rem;padding-right:1.4rem}
+  .hero{padding:0 1.4rem 4.5rem}
+  #nav{padding:0 1.4rem}
+  .fgrid{grid-template-columns:1fr}
+  .news-form{flex-direction:column}
+}
+</style>
+</head>
+<body>
+
+<!-- LOCALE SELECTOR -->
+<div id="locale">
+  <div id="lbg"></div>
+  <div id="lin">
+    <h1>Where are you visiting from?</h1>
+    <p>ANDREA WILL TAILOR EVERYTHING JUST FOR YOU</p>
+    <div class="lcards">
+      <div class="lcard" onclick="setLoc('ro')"><span class="flag">🇷🇴</span><div class="cn">România</div><div class="cs">Experiență în română · €</div></div>
+      <div class="lcard" onclick="setLoc('hu')"><span class="flag">🇭🇺</span><div class="cn">Magyarország</div><div class="cs">Magyar élmény · €</div></div>
+      <div class="lcard" onclick="setLoc('int')"><span class="flag">🌍</span><div class="cn">International</div><div class="cs">English · USD</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- NAV -->
+<nav id="nav">
+  <div class="nlogo" onclick="go('home')"><span>Andrea</span> in Bali</div>
+  <ul class="nlinks">
+    <li><a id="nl-home" class="on" onclick="go('home')">Home</a></li>
+    <li><a id="nl-about" onclick="go('about')">About</a></li>
+    <li><a id="nl-places" onclick="go('places')">Places</a></li>
+    <li><a id="nl-gems" onclick="go('gems')">Hidden Gems</a></li>
+    <li><a id="nl-food" onclick="go('food')">Food</a></li>
+    <li><a id="nl-hotels" onclick="go('hotels')">Hotels</a></li>
+    <li><a id="nl-exp" onclick="go('exp')">Experiences</a></li>
+    <li><a id="nl-guide" onclick="go('guide')">Guide</a></li>
+    <li><a id="nl-tools" onclick="go('tools')">Tools</a></li>
+    <li><a id="nl-plan" onclick="go('plan')">Plan My Trip</a></li>
+    <li><a id="nl-blog" onclick="go('blog')">Blog</a></li>
+    <li><a id="nl-gallery" onclick="go('gallery')">Gallery</a></li>
+    <li><a id="nl-drivers" onclick="go('drivers')">Drivers</a></li>
+    <li><a id="nl-faq" onclick="go('faq')">FAQ</a></li>
+    <li><a id="nl-contact" onclick="go('contact')">Contact</a></li>
+  </ul>
+  <div class="nr">
+    <button class="srchbtn" onclick="openSearch()"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg></button>
+    <div class="lbadge" id="lbadge" onclick="resetLoc()">🌍 EN</div>
+  </div>
+</nav>
+
+<!-- SEARCH -->
+<div id="sovl" onclick="if(event.target===this)closeSearch()">
+  <div class="sbox">
+    <button class="cls-btn" onclick="closeSearch()">✕</button>
+    <h3>Search Andrea's Bali</h3>
+    <div class="sinp-row"><input type="text" id="sinp" placeholder="Try: Ubud cafés, hidden beaches, budget hotels..." oninput="doSearch(this.value)"></div>
+    <div class="sresults" id="sresults"></div>
+  </div>
+</div>
+
+<!-- LIGHTBOX -->
+<div id="lb" onclick="if(event.target.id==='lb')closeLb()">
+  <button class="lb-close" onclick="closeLb()">✕</button>
+  <img id="lb-img" src="" alt="">
+  <div id="lb-cap"></div>
+</div>
+
+<!-- APP -->
+<div id="app">
+
+<!-- ═══ HOME ═══ -->
+<div id="pg-home" class="pg on">
+  <div class="hero">
+    <div class="hbg" style="background:url('https://images.unsplash.com/photo-1518548419970-58e3b4079ab2?w=1600&auto=format&fit=crop')center/cover"></div>
+    <div class="hov"></div>
+    <div class="hc">
+      <div class="heye">BALI, INDONESIA</div>
+      <h1 class="hh" id="h-title">Not another travel website.</h1>
+      <p class="hsub" id="h-sub">Just Bali, through Andrea's eyes.</p>
+      <div style="display:flex;gap:1rem;flex-wrap:wrap">
+        <button class="bp" onclick="go('plan')">Plan my trip →</button>
+        <button class="bg" onclick="go('places')">Explore Bali</button>
+      </div>
+    </div>
+    <div class="hscroll">Scroll ↓</div>
+  </div>
+  <div class="wbar">
+    <div class="wbar-l">
+      <div class="wi"><span>🌤</span><span>Ubud: <strong>28°C</strong></span></div>
+      <div class="wi"><span>☀️</span><span>Seminyak: <strong>31°C</strong></span></div>
+      <div class="wi"><span>🌊</span><span>Ocean: <strong>29°C</strong></span></div>
+      <div class="wi"><span>💨</span><span>Winds: <strong>light SE</strong></span></div>
+    </div>
+    <div class="sbadge" id="season-badge">✦ Dry Season — Perfect Time to Visit</div>
+  </div>
+  <div class="sbar">
+    <div class="sbi"><div class="sbn">3+</div><div class="sbl">Years in Bali</div></div>
+    <div class="sbi"><div class="sbn">120+</div><div class="sbl" id="sbl-stat">Places Reviewed</div></div>
+    <div class="sbi"><div class="sbn">0</div><div class="sbl">Sponsored Posts</div></div>
+    <div class="sbi"><div class="sbn">100%</div><div class="sbl">Honest Opinions</div></div>
+  </div>
+  <div class="sec">
+    <div class="agrid">
+      <div class="aphoto"><img src="https://images.unsplash.com/photo-1529156069898-49953e39b3ac?w=800&auto=format&fit=crop&q=80" alt="Andrea"><div class="aptag"><strong>Andrea</strong>Living in Bali 🌴</div></div>
+      <div>
+        <div class="eye">MEET ANDREA</div>
+        <h2 class="sh" id="and-title">Hi, I'm Andrea.</h2>
+        <div class="abio" id="and-bio"><p>I was born and raised in Romania and now I live in Bali. When I first came here, I made <span class="hl">every mistake possible</span>. Visited overrated places. Paid too much. Missed amazing hidden spots.</p><p>This website is everything I wish someone had told me before my first trip. If I wouldn't recommend it to my closest friends, it doesn't belong here.</p></div>
+        <div style="display:flex;gap:.75rem;flex-wrap:wrap;margin-top:1.4rem">
+          <button class="bp" onclick="go('about')">Read Andrea's story →</button>
+          <button class="bg" onclick="go('contact')">Get in touch</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="sec" style="padding-top:0">
+    <div class="eye">PLACES</div>
+    <h2 class="sh">Andrea's Bali</h2>
+    <p class="sp" id="p-sub">Every destination hand-picked. No tourist traps. Just the places Andrea actually loves.</p>
+    <div class="mosaic">
+      <div class="mc mc-big" onclick="go('ubud')" style="grid-row:span 2"><img src="https://images.unsplash.com/photo-1555400038-63f5ba517a47?w=1000&auto=format&fit=crop&q=80" alt="Ubud"><div class="mov"></div><div class="mcc"><span class="mtag">⭐ Andrea's Favorite</span><h3>Ubud</h3><p>Where the real Bali lives.</p></div></div>
+      <div class="mc" onclick="go('uluwatu')"><img src="https://images.unsplash.com/photo-1537996194471-e657df975ab4?w=600&auto=format&fit=crop&q=80" alt="Uluwatu"><div class="mov"></div><div class="mcc"><span class="mtag">Cliffs & Surf</span><h3>Uluwatu</h3><p>Sunset at the temple. Non-negotiable.</p></div></div>
+      <div class="mc" onclick="go('canggu')"><img src="https://images.unsplash.com/photo-1604928141064-207cea6f571f?w=600&auto=format&fit=crop&q=80" alt="Canggu"><div class="mov"></div><div class="mcc"><span class="mtag">Café Culture</span><h3>Canggu</h3><p>Nomads, rice fields, great coffee.</p></div></div>
+      <div class="mc" onclick="go('nusa')"><img src="https://images.unsplash.com/photo-1518548419970-58e3b4079ab2?w=600&auto=format&fit=crop&q=80" alt="Nusa Penida"><div class="mov"></div><div class="mcc"><span class="mtag">Island Escape</span><h3>Nusa Penida</h3><p>Kelingking Beach will break your brain.</p></div></div>
+      <div class="mc" onclick="go('seminyak')"><img src="https://images.unsplash.com/photo-1609137144813-7d9921338f24?w=600&auto=format&fit=crop&q=80" alt="Seminyak"><div class="mov"></div><div class="mcc"><span class="mtag">Sunset Vibes</span><h3>Seminyak</h3><p>Beach clubs & world-class dining.</p></div></div>
+    </div>
+    <div style="text-align:center;margin-top:2rem;display:flex;justify-content:center;gap:1rem;flex-wrap:wrap">
+      <button class="bg" onclick="go('places')">See all 9 destinations →</button>
+      <button class="bg" onclick="go('gems')">Hidden Gems →</button>
+    </div>
+  </div>
+  <div class="sec" style="padding-top:0">
+    <div class="eye">ANDREA SAYS</div>
+    <h2 class="sh">Worth your time — or not</h2>
+    <p class="sp">Honest takes. No star ratings. No sponsored content. Just Andrea's actual opinion.</p>
+    <div class="cgrid">
+      <div class="rvc"><div class="rvi"><img src="https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?w=600&auto=format&fit=crop&q=80" alt="Café"></div><div class="rvb"><div class="rvtype">☕ Café · Ubud</div><div class="rvt">Café Pomegranate</div><p class="rvp">Hidden in a rice field. Best avocado toast on earth and the coffee is ridiculous.</p><div class="rvv">"I'd come back every single morning." — Andrea</div><div class="rvf"><span class="pp">~<span class="cur">€</span>4 coffee</span><span class="op">7am–5pm</span></div></div></div>
+      <div class="rvc"><div class="rvi"><img src="https://images.unsplash.com/photo-1563245372-f21724e3856d?w=600&auto=format&fit=crop&q=80" alt="Food"></div><div class="rvb"><div class="rvtype">🍜 Warung · Ubud</div><div class="rvt">Warung Babi Guling Pak Malen</div><p class="rvp">Most famous suckling pig spot. Get there before 11am — they run out.</p><div class="rvv">"Good but I wouldn't wait more than 20 min." — Andrea</div><div class="rvf"><span class="pp">~<span class="cur">€</span>6 meal</span><span class="op">8am–2pm</span></div></div></div>
+      <div class="rvc"><div class="rvi"><img src="https://images.unsplash.com/photo-1571896349842-33c89424de2d?w=600&auto=format&fit=crop&q=80" alt="Hotel"></div><div class="rvb"><div class="rvtype">🏨 Hotel · Ubud</div><div class="rvt">Komaneka at Bisma</div><p class="rvp">Infinity pool over the jungle canopy. Spectacular breakfast. Pricey but life-changing.</p><div class="rvv">"Splurge on this one. You won't regret it." — Andrea</div><div class="rvf"><span class="pp">from <span class="cur">€</span>280/night</span><span class="op">Pool · Breakfast</span></div></div></div>
+    </div>
+  </div>
+  <div class="mapsec">
+    <div style="max-width:1180px;margin:0 auto">
+      <div class="eye">INTERACTIVE MAP</div>
+      <h2 class="sh">Find your Bali</h2>
+      <p class="sp">Click any pin to explore a destination Andrea has reviewed.</p>
+      <div class="mapwrap">
+        <img src="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=1200&auto=format&fit=crop&q=65" alt="Bali map">
+        <div class="pin" style="left:38%;top:40%" onclick="go('ubud')"><div class="plbl">Ubud ⭐</div><div class="pdot"></div></div>
+        <div class="pin" style="left:28%;top:72%" onclick="go('uluwatu')"><div class="plbl">Uluwatu</div><div class="pdot"></div></div>
+        <div class="pin" style="left:20%;top:57%" onclick="go('canggu')"><div class="plbl">Canggu</div><div class="pdot"></div></div>
+        <div class="pin" style="left:24%;top:63%" onclick="go('seminyak')"><div class="plbl">Seminyak</div><div class="pdot"></div></div>
+        <div class="pin" style="left:62%;top:68%" onclick="go('nusa')"><div class="plbl">Nusa Penida</div><div class="pdot"></div></div>
+        <div class="pin" style="left:45%;top:22%"><div class="plbl">Mt. Batur</div><div class="pdot"></div></div>
+        <div class="pin" style="left:65%;top:35%" onclick="go('amed')"><div class="plbl">Amed</div><div class="pdot"></div></div>
+        <div class="pin" style="left:52%;top:48%" onclick="go('sidemen')"><div class="plbl">Sidemen</div><div class="pdot"></div></div>
+        <div class="pin" style="left:15%;top:35%"><div class="plbl">Lovina</div><div class="pdot"></div></div>
+      </div>
+    </div>
+  </div>
+  <div class="sec">
+    <div class="eye">BLOG</div>
+    <h2 class="sh">Real stories, no fluff</h2>
+    <p class="sp">Andrea writes like she'd text a friend. No SEO filler. Just the actually useful stuff.</p>
+    <div class="bgrid">
+      <div class="blc" onclick="go('post1')"><div class="bli"><img src="https://images.unsplash.com/photo-1553361371-9b22f78e8b1d?w=700&auto=format&fit=crop&q=80" alt="B1"></div><div class="bltag">HONEST TAKES</div><div class="blh">Things I wish I knew before moving to Bali</div><p class="blp">The mosquitoes. The traffic. The magic. Everything nobody puts in a travel brochure.</p><div class="blm">8 min · June 2025</div></div>
+      <div class="blc" onclick="go('post2')"><div class="bli"><img src="https://images.unsplash.com/photo-1580655653885-65763b2597d1?w=700&auto=format&fit=crop&q=80" alt="B2"></div><div class="bltag">TOURIST TRAPS</div><div class="blh">5 places in Bali I'd skip (and what to do instead)</div><p class="blp">If I see one more photo at the Tegallalang swing, I'm moving back to Bucharest.</p><div class="blm">6 min · May 2025</div></div>
+      <div class="blc" onclick="go('post3')"><div class="bli"><img src="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=700&auto=format&fit=crop&q=80" alt="B3"></div><div class="bltag">MONEY</div><div class="blh">Is Bali actually expensive? The honest breakdown.</div><p class="blp">Depends completely on how you travel. Here's what things actually cost.</p><div class="blm">5 min · April 2025</div></div>
+    </div>
+    <div style="text-align:center;margin-top:2rem"><button class="bg" onclick="go('blog')">Read all 8 stories →</button></div>
+  </div>
+  <div class="sec" style="padding-top:0">
+    <div class="eye">WHAT'S OPEN NOW</div>
+    <h2 class="sh">Good timing — here's what to do today</h2>
+    <p class="sp">Based on the current time in Bali (WITA, UTC+8).</p>
+    <div class="open-grid" id="open-grid"></div>
+  </div>
+  <div class="sec" style="padding-top:0">
+    <div class="dcta">
+      <div>
+        <div style="font-size:.68rem;letter-spacing:.22em;text-transform:uppercase;color:rgba(212,168,83,.8);margin-bottom:.9rem">PLAN MY TRIP</div>
+        <h2>Let Andrea plan your perfect Bali itinerary</h2>
+        <p>Tell Andrea a bit about yourself and she'll put together a day-by-day plan — free, honest, and completely personal.</p>
+        <button class="bgold" onclick="go('plan')" style="margin-top:1.2rem">Start planning →</button>
+      </div>
+      <div class="vgrid">
+        <div class="vibe" onclick="this.classList.toggle('on')"><div class="vi">💑</div>Couple</div>
+        <div class="vibe" onclick="this.classList.toggle('on')"><div class="vi">🎒</div>Solo</div>
+        <div class="vibe" onclick="this.classList.toggle('on')"><div class="vi">👨‍👩‍👧</div>Family</div>
+        <div class="vibe" onclick="this.classList.toggle('on')"><div class="vi">🌿</div>Nature</div>
+        <div class="vibe" onclick="this.classList.toggle('on')"><div class="vi">🏄</div>Adventure</div>
+        <div class="vibe" onclick="this.classList.toggle('on')"><div class="vi">🍜</div>Food</div>
+        <div class="vibe" onclick="this.classList.toggle('on')"><div class="vi">✨</div>Luxury</div>
+        <div class="vibe" onclick="this.classList.toggle('on')"><div class="vi">🏖</div>Beach</div>
+      </div>
+    </div>
+  </div>
+  <div class="newsec">
+    <div class="news-inner">
+      <div class="eye">ANDREA'S NEWSLETTER</div>
+      <h2>Bali in your inbox. Once a month.</h2>
+      <p>New hidden spots, honest hotel reviews, what's open, what closed, what Andrea's obsessing over this month. No spam ever.</p>
+      <div class="news-form">
+        <input type="email" id="news-email" placeholder="your@email.com">
+        <button onclick="subNews()">Subscribe →</button>
+      </div>
+      <div class="news-perks"><span class="nperk">✓ No spam, ever</span><span class="nperk">✓ Once a month max</span><span class="nperk">✓ Unsubscribe anytime</span></div>
+      <div class="newsuc" id="newsuc">✓ You're in! Andrea will be in touch from her favourite café in Ubud.</div>
+    </div>
+  </div>
+  <footer>
+    <div class="fgrid">
+      <div><div class="fbrand"><span>Andrea</span> in Bali</div><p class="fdesc">Not another travel website. Just Bali, through Andrea's eyes. Every recommendation from personal experience — no sponsored content, ever.</p><div class="fsocial"><div class="fsoc">📸</div><div class="fsoc">💬</div><div class="fsoc">✉️</div></div></div>
+      <div class="fcol"><h4>Explore</h4><a onclick="go('places')">Places</a><a onclick="go('gems')">Hidden Gems</a><a onclick="go('food')">Food & Cafés</a><a onclick="go('hotels')">Hotels</a><a onclick="go('exp')">Experiences</a><a onclick="go('gallery')">Gallery</a></div>
+      <div class="fcol"><h4>Destinations</h4><a onclick="go('ubud')">Ubud</a><a onclick="go('uluwatu')">Uluwatu</a><a onclick="go('canggu')">Canggu</a><a onclick="go('nusa')">Nusa Penida</a><a onclick="go('seminyak')">Seminyak</a><a onclick="go('sidemen')">Sidemen</a><a onclick="go('amed')">Amed</a></div>
+      <div class="fcol"><h4>Andrea</h4><a onclick="go('about')">About Andrea</a><a onclick="go('plan')">Plan My Trip</a><a onclick="go('tools')">Travel Tools</a><a onclick="go('drivers')">Private Drivers</a><a onclick="go('faq')">FAQ</a><a onclick="go('contact')">Contact</a></div>
+    </div>
+    <div class="fbot"><p>© 2025 Andrea in Bali · Made with ❤️ from Ubud</p><p>Prices shown in <span id="cur-lbl">EUR (€)</span></p></div>
+  </footer>
+</div>
+
+<!-- ═══ ABOUT ═══ -->
+<div id="pg-about" class="pg">
+  <div class="ghero"><div class="dbg" style="background-image:url('https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=1400&auto=format&fit=crop&q=80');height:100%"></div><div class="dov" style="position:absolute;inset:0"></div><div style="position:relative;z-index:1;padding:2.5rem 3rem;display:flex;align-items:flex-end;height:100%"><div><button class="back" onclick="go('home')">← Back</button><h1 class="dh" id="about-h1">From Bucharest to Bali</h1><p class="ds" id="about-ds">A Romanian girl who fell head over heels for a tropical island.</p></div></div></div>
+  <div class="abodyw">
+    <div class="eye">THE STORY</div>
+    <p id="about-p1">I was 27 when I first landed in Bali. I'd booked a one-week holiday on impulse. I figured I'd tick it off the bucket list and go back to my normal life. That's not what happened.</p>
+    <p>Day four I rented a scooter and drove north with no plan. I ended up in Ubud by accident. I sat in a café above a rice terrace, ordered a coffee that cost €1.80, and didn't move for three hours. That's when Bali started making sense.</p>
+    <div class="ainline"><img src="https://images.unsplash.com/photo-1555400038-63f5ba517a47?w=1000&auto=format&fit=crop&q=80" alt="Bali"></div>
+    <h2>The first three days (the honest version)</h2>
+    <p>I spent them in Kuta. I'm not proud of it. Kuta was Bali's first tourist strip and it shows — chaotic, overcrowded, and mediocre. It's the first place you land and the place I'd tell you to leave as quickly as possible.</p>
+    <div class="pq">The Bali I fell in love with has nothing to do with the Bali in travel brochures. It's quieter. Weirder. More spiritual. More real.</div>
+    <h2>Why I moved (and why I stayed)</h2>
+    <p>A year later I was back. Then again six months after that. On the fourth trip I looked at my return ticket, thought about my office in Bucharest, and didn't use it. Three years later I'm still here. I have a favourite warung where they start making my order when they see me park outside.</p>
+    <h2>Why this website exists</h2>
+    <p>Most travel content about Bali is either outdated, sponsored, or written by someone who visited for five days and is now an "expert." I wanted honest advice from someone who actually lives here.</p>
+    <p id="about-p-end">Everything on this site I've personally experienced. If I wouldn't recommend it to my best friend, it doesn't exist here. That's the deal.</p>
+    <div class="ainline"><img src="https://images.unsplash.com/photo-1529156069898-49953e39b3ac?w=1000&auto=format&fit=crop&q=80" alt="Andrea"></div>
+    <div style="display:flex;gap:1rem;flex-wrap:wrap"><button class="bp" onclick="go('plan')">Plan my trip with Andrea</button><button class="bg" onclick="go('contact')">Contact Andrea</button></div>
+  </div>
+</div>
+
+<!-- ═══ PLACES ═══ -->
+<div id="pg-places" class="pg">
+  <div class="sec" style="padding-top:3rem">
+    <div class="eye">ALL DESTINATIONS</div><h2 class="sh">All of Bali, Andrea's way</h2><p class="sp">Nine destinations she's explored properly. Honest picks only.</p>
+    <div class="mosaic" style="grid-template-columns:repeat(3,1fr);grid-template-rows:260px 260px">
+      <div class="mc mc-big" onclick="go('ubud')" style="grid-row:span 2"><img src="https://images.unsplash.com/photo-1555400038-63f5ba517a47?w=800&auto=format&fit=crop&q=80" alt="Ubud"><div class="mov"></div><div class="mcc"><span class="mtag">⭐ Top Pick</span><h3>Ubud</h3><p>Jungle, temples & rice terraces</p></div></div>
+      <div class="mc" onclick="go('uluwatu')"><img src="https://images.unsplash.com/photo-1537996194471-e657df975ab4?w=600&auto=format&fit=crop&q=80" alt="Uluwatu"><div class="mov"></div><div class="mcc"><span class="mtag">Cliffs</span><h3>Uluwatu</h3><p>Clifftop temples & surf</p></div></div>
+      <div class="mc" onclick="go('canggu')"><img src="https://images.unsplash.com/photo-1604928141064-207cea6f571f?w=600&auto=format&fit=crop&q=80" alt="Canggu"><div class="mov"></div><div class="mcc"><span class="mtag">Nomad Hub</span><h3>Canggu</h3><p>Cafés & creative vibes</p></div></div>
+      <div class="mc" onclick="go('nusa')"><img src="https://images.unsplash.com/photo-1518548419970-58e3b4079ab2?w=600&auto=format&fit=crop&q=80" alt="Nusa Penida"><div class="mov"></div><div class="mcc"><span class="mtag">Island</span><h3>Nusa Penida</h3><p>Wild beaches & manta rays</p></div></div>
+      <div class="mc" onclick="go('seminyak')"><img src="https://images.unsplash.com/photo-1609137144813-7d9921338f24?w=600&auto=format&fit=crop&q=80" alt="Seminyak"><div class="mov"></div><div class="mcc"><span class="mtag">Sunset</span><h3>Seminyak</h3><p>Beach clubs & fine dining</p></div></div>
+    </div>
+    <div style="margin-top:1.4rem;display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:1rem">
+      <div class="mc" style="aspect-ratio:16/9;border-radius:16px" onclick="go('sidemen')"><img src="https://images.unsplash.com/photo-1580655653885-65763b2597d1?w=600&auto=format&fit=crop&q=80" alt="Sidemen"><div class="mov"></div><div class="mcc"><span class="mtag">Hidden Gem</span><h3>Sidemen</h3><p>Authentic Bali, zero tourists</p></div></div>
+      <div class="mc" style="aspect-ratio:16/9;border-radius:16px" onclick="go('amed')"><img src="https://images.unsplash.com/photo-1553361371-9b22f78e8b1d?w=600&auto=format&fit=crop&q=80" alt="Amed"><div class="mov"></div><div class="mcc"><span class="mtag">Diving</span><h3>Amed</h3><p>Black sand & shipwrecks</p></div></div>
+      <div class="mc" style="aspect-ratio:16/9;border-radius:16px"><img src="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=600&auto=format&fit=crop&q=80" alt="Mt Batur"><div class="mov"></div><div class="mcc"><span class="mtag">Trekking</span><h3>Mount Batur</h3><p>Sunrise hike · Active volcano</p></div></div>
+      <div class="mc" style="aspect-ratio:16/9;border-radius:16px"><img src="https://images.unsplash.com/photo-1571896349842-33c89424de2d?w=600&auto=format&fit=crop&q=80" alt="Lovina"><div class="mov"></div><div class="mcc"><span class="mtag">Peaceful North</span><h3>Lovina</h3><p>Dolphins at dawn</p></div></div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ DESTINATION PAGES ═══ -->
+<div id="pg-ubud" class="pg">
+  <div class="dhero"><div class="dbg" style="background-image:url('https://images.unsplash.com/photo-1555400038-63f5ba517a47?w=1400&auto=format&fit=crop&q=80')"></div><div class="dov"></div><div style="position:relative;z-index:1"><button class="back" onclick="go('places')">← All destinations</button><h1 class="dh">Ubud</h1><p class="ds">The soul of Bali. Rice terraces, temples, and incredible food all in one valley.</p></div></div>
+  <div class="dbody">
+    <div class="gal"><div class="g0"><img src="https://images.unsplash.com/photo-1555400038-63f5ba517a47?w=700&auto=format&fit=crop&q=80" alt="U1"></div><div><img src="https://images.unsplash.com/photo-1553361371-9b22f78e8b1d?w=400&auto=format&fit=crop&q=80" alt="U2"></div><div><img src="https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?w=400&auto=format&fit=crop&q=80" alt="U3"></div><div><img src="https://images.unsplash.com/photo-1563245372-f21724e3856d?w=400&auto=format&fit=crop&q=80" alt="U4"></div><div><img src="https://images.unsplash.com/photo-1604928141064-207cea6f571f?w=400&auto=format&fit=crop&q=80" alt="U5"></div></div>
+    <div class="dlayout">
+      <div>
+        <div class="opinion"><div class="eye">ANDREA'S TAKE</div><p>Ubud is the place that made me fall completely in love with Bali. There's a calm here that's hard to explain. You wake up to the sound of gamelan music, have coffee while watching fog rise from the jungle valley, and somehow the rest of the world just stops existing.</p><p>If you're visiting Bali for the first time, spend at least 3 nights here. Skip the tourist traps — the swing, the floating breakfast. Just wander. The real Ubud is in the tiny warungs, the random temples you stumble into, and the conversations with locals you weren't expecting to have.</p></div>
+        <div class="tabs"><button class="tab on" onclick="swt(this,'tt')">Things to do</button><button class="tab" onclick="swt(this,'te')">Eat & Drink</button><button class="tab" onclick="swt(this,'ts')">Where to Sleep</button></div>
+        <ul class="tlist" id="tt"><li class="ti"><div class="tnum">1</div><div><h4>Tegallalang Rice Terraces</h4><p>Go before 8am. Skip the swings. The terraces themselves are free to walk through.</p></div></li><li class="ti"><div class="tnum">2</div><div><h4>Pura Tirta Empul Holy Springs</h4><p>The holy water temple. One of the most genuinely spiritual places in Bali. Sarong and sash provided at the gate.</p></div></li><li class="ti"><div class="tnum">3</div><div><h4>Campuhan Ridge Walk</h4><p>9km through jungle and rice fields. Free. Magical early morning. Bring water.</p></div></li><li class="ti"><div class="tnum">4</div><div><h4>Sacred Monkey Forest</h4><p>Yes they will steal your sunglasses. Keep belongings close. Don't show food. It's chaotic and completely worth it.</p></div></li><li class="ti"><div class="tnum">5</div><div><h4>Kecak Dance at Uluwatu (Day Trip)</h4><p>Fire dancers at sunset over a 70m cliff. One of the most memorable things I've seen in my life.</p></div></li><li class="ti"><div class="tnum">6</div><div><h4>Balinese Cooking Class</h4><p>Starts with a market tour, ends with you eating your own nasi goreng. About <span class="cur">€</span>35–55.</p></div></li></ul>
+        <ul class="tlist" id="te" style="display:none"><li class="ti"><div class="tnum">☕</div><div><h4>Café Pomegranate</h4><p>Rice field views, best cold brew in Bali. Before 10am or expect a queue.</p></div></li><li class="ti"><div class="tnum">☕</div><div><h4>Seniman Coffee</h4><p>Serious specialty single-origin coffee. Possibly the best espresso in Bali.</p></div></li><li class="ti"><div class="tnum">🍜</div><div><h4>Warung Babi Guling Pak Malen</h4><p>Suckling pig rice. Life-changing sambal. Get there before 11am — they run out every day.</p></div></li><li class="ti"><div class="tnum">🌿</div><div><h4>Moksa Plant-Based</h4><p>Grows everything in their permaculture garden. Even if you eat meat, go once.</p></div></li></ul>
+        <ul class="tlist" id="ts" style="display:none"><li class="ti"><div class="tnum">💎</div><div><h4>Komaneka at Bisma — Luxury</h4><p>Infinity pool over jungle canopy. Spectacular breakfast. From <span class="cur">€</span>280/night.</p></div></li><li class="ti"><div class="tnum">✦</div><div><h4>Bisma Eight — Mid Range</h4><p>Infinity pool, rice field views, great breakfast. Best value in Ubud. From <span class="cur">€</span>130/night.</p></div></li><li class="ti"><div class="tnum">○</div><div><h4>Alaya Resort — Budget</h4><p>Pool, central location, lovely staff. From <span class="cur">€</span>55/night.</p></div></li></ul>
+        <div style="margin-top:2rem"><div class="sbc"><h4>Nearby Destinations</h4><div class="nearby"><span class="nbchip" onclick="go('sidemen')">Sidemen →</span><span class="nbchip" onclick="go('nusa')">Nusa Penida →</span><span class="nbchip" onclick="go('uluwatu')">Uluwatu →</span><span class="nbchip" onclick="go('amed')">Amed →</span></div></div></div>
+      </div>
+      <div>
+        <div class="sbc"><h4>Quick Info</h4><div class="ir"><span>Best time</span><span>May–Oct</span></div><div class="ir"><span>From airport</span><span>~1.5 hours</span></div><div class="ir"><span>Budget/day</span><span><span class="cur">€</span>30–60</span></div><div class="ir"><span>Vibe</span><span>Spiritual, artsy</span></div><div class="ir"><span>Min. stay</span><span>3 nights</span></div></div>
+        <div class="sbc"><h4>Andrea Recommends</h4><p style="font-size:.83rem;line-height:1.7;color:#3A3530">Stay close to the rice fields. Rent a scooter on day two. Eat at local warungs at least once.</p></div>
+        <div class="sbc dkc"><h4>Need Help Planning?</h4><p>Message Andrea on WhatsApp — she'll help plan your Ubud days personally.</p><button class="bgold" style="width:100%">WhatsApp Andrea</button></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div id="pg-uluwatu" class="pg"><div class="dhero"><div class="dbg" style="background-image:url('https://images.unsplash.com/photo-1537996194471-e657df975ab4?w=1400&auto=format&fit=crop&q=80')"></div><div class="dov"></div><div style="position:relative;z-index:1"><button class="back" onclick="go('places')">← All destinations</button><h1 class="dh">Uluwatu</h1><p class="ds">Clifftop temples, legendary surf breaks, and sunsets that stop your heart.</p></div></div><div class="dbody"><div class="dlayout"><div><div class="opinion"><div class="eye">ANDREA'S TAKE</div><p>Uluwatu is the dramatic, slightly wild cousin of Bali. The cliffs here are 70 metres above the Indian Ocean and the Kecak dance at sunset is genuinely one of the most moving performances I've witnessed anywhere. Fire dancers, 50 men chanting in unison, the sun dropping into the ocean. Go.</p></div><ul class="tlist"><li class="ti"><div class="tnum">1</div><div><h4>Kecak Dance at Sunset</h4><p>Arrive 30 minutes early. Watch the sun drop into the ocean while fire dancers perform. Bring a sarong.</p></div></li><li class="ti"><div class="tnum">2</div><div><h4>Padang Padang Beach</h4><p>Squeeze through a gap in the rocks to get there. One of the most beautiful small beaches I've been to anywhere on earth.</p></div></li><li class="ti"><div class="tnum">3</div><div><h4>Single Fin Bar</h4><p>Best bar to watch the Uluwatu surf break. Cold Bintang, front row to world-class waves.</p></div></li><li class="ti"><div class="tnum">4</div><div><h4>Jimbaran Fish Market Dinner</h4><p>Pick your fish from the market, they grill it on the beach. Watch the sunset over the ocean. Peak Bali.</p></div></li></ul><div style="margin-top:2rem"><div class="sbc"><h4>Nearby</h4><div class="nearby"><span class="nbchip" onclick="go('seminyak')">Seminyak →</span><span class="nbchip" onclick="go('canggu')">Canggu →</span><span class="nbchip" onclick="go('nusa')">Nusa Penida →</span></div></div></div></div><div><div class="sbc"><h4>Quick Info</h4><div class="ir"><span>From airport</span><span>~30 min</span></div><div class="ir"><span>Budget/day</span><span><span class="cur">€</span>40–80</span></div><div class="ir"><span>Don't miss</span><span>Kecak dance</span></div></div><div class="sbc dkc"><h4>Need Help?</h4><p>Andrea will help plan your Uluwatu days.</p><button class="bgold" style="width:100%">WhatsApp Andrea</button></div></div></div></div></div>
+
+<div id="pg-canggu" class="pg"><div class="dhero"><div class="dbg" style="background-image:url('https://images.unsplash.com/photo-1604928141064-207cea6f571f?w=1400&auto=format&fit=crop&q=80')"></div><div class="dov"></div><div style="position:relative;z-index:1"><button class="back" onclick="go('places')">← All destinations</button><h1 class="dh">Canggu</h1><p class="ds">Digital nomads, rice fields, great coffee, and a very specific type of Bali energy.</p></div></div><div class="dbody"><div class="dlayout"><div><div class="opinion"><div class="eye">ANDREA'S TAKE</div><p>Canggu is polarizing. Half the people who visit fall completely in love with it. The other half find it too Instagram-ified. I understand both reactions. The truth is Canggu has genuinely great cafés, good surf, and a creative energy that's hard to find anywhere else. The traffic is a nightmare. But there's a reason people end up staying much longer than planned.</p></div><ul class="tlist"><li class="ti"><div class="tnum">1</div><div><h4>Echo Beach Sunset</h4><p>Sit at any beach bar and watch the sun go down while surfers are still in the water. This is Canggu at its best.</p></div></li><li class="ti"><div class="tnum">2</div><div><h4>Morning Coffee Crawl</h4><p>Tanamera → Hungry Bird → Cinta. Three cafés, three different vibes, all walkable.</p></div></li><li class="ti"><div class="tnum">3</div><div><h4>Finn's Beach Club</h4><p>Over-the-top? Yes. Worth it for one afternoon? Also yes. Don't go on weekends.</p></div></li></ul><div style="margin-top:2rem"><div class="sbc"><h4>Nearby</h4><div class="nearby"><span class="nbchip" onclick="go('seminyak')">Seminyak →</span><span class="nbchip" onclick="go('uluwatu')">Uluwatu →</span><span class="nbchip" onclick="go('ubud')">Ubud →</span></div></div></div></div><div><div class="sbc"><h4>Quick Info</h4><div class="ir"><span>From airport</span><span>~45 min</span></div><div class="ir"><span>Budget/day</span><span><span class="cur">€</span>45–90</span></div><div class="ir"><span>Best for</span><span>Cafés, surf, nomads</span></div></div><div class="sbc dkc"><h4>Need Help?</h4><p>Andrea knows every corner of Canggu.</p><button class="bgold" style="width:100%">WhatsApp Andrea</button></div></div></div></div></div>
+
+<div id="pg-nusa" class="pg"><div class="dhero"><div class="dbg" style="background-image:url('https://images.unsplash.com/photo-1518548419970-58e3b4079ab2?w=1400&auto=format&fit=crop&q=80')"></div><div class="dov"></div><div style="position:relative;z-index:1"><button class="back" onclick="go('places')">← All destinations</button><h1 class="dh">Nusa Penida</h1><p class="ds">The island that reminds you why you came to Bali in the first place.</p></div></div><div class="dbody"><div class="dlayout"><div><div class="opinion"><div class="eye">ANDREA'S TAKE</div><p>Nusa Penida is the most dramatic place I've ever been. The roads are terrible, the weather can be brutal, and Kelingking Beach is one of those places where you struggle to believe this is real. Go. Just go.</p></div><ul class="tlist"><li class="ti"><div class="tnum">1</div><div><h4>Kelingking Beach (T-Rex Cliff)</h4><p>The viewpoint alone is extraordinary. If you're fit and brave, hike down to the beach. Steep, rough, incredible.</p></div></li><li class="ti"><div class="tnum">2</div><div><h4>Angel's Billabong</h4><p>Natural infinity pool carved by the ocean into rock. Go at low tide.</p></div></li><li class="ti"><div class="tnum">3</div><div><h4>Manta Ray Snorkeling</h4><p>One of the world's best manta ray spots. Book early morning.</p></div></li><li class="ti"><div class="tnum">4</div><div><h4>Crystal Bay</h4><p>Most reliably beautiful beach on the island. Calm water, good snorkeling, lovely sunset.</p></div></li></ul></div><div><div class="sbc"><h4>Quick Info</h4><div class="ir"><span>Fast boat from</span><span>Sanur (45min)</span></div><div class="ir"><span>Budget/day</span><span><span class="cur">€</span>35–70</span></div><div class="ir"><span>Roads</span><span>Rough — hire driver</span></div><div class="ir"><span>Min. stay</span><span>2 nights</span></div></div><div class="sbc dkc"><h4>Need Help?</h4><p>Andrea knows the best Nusa Penida routes.</p><button class="bgold" style="width:100%">WhatsApp Andrea</button></div></div></div></div></div>
+
+<div id="pg-seminyak" class="pg"><div class="dhero"><div class="dbg" style="background-image:url('https://images.unsplash.com/photo-1609137144813-7d9921338f24?w=1400&auto=format&fit=crop&q=80')"></div><div class="dov"></div><div style="position:relative;z-index:1"><button class="back" onclick="go('places')">← All destinations</button><h1 class="dh">Seminyak</h1><p class="ds">Beach clubs, world-class restaurants, and Bali's most beautiful sunsets.</p></div></div><div class="dbody"><div class="dlayout"><div><div class="opinion"><div class="eye">ANDREA'S TAKE</div><p>Seminyak is Bali's most cosmopolitan neighbourhood. The restaurants here are genuinely excellent. More polished than Canggu, more adult than Kuta, and the shopping on Jalan Laksmana is genuinely fun.</p></div><ul class="tlist"><li class="ti"><div class="tnum">1</div><div><h4>Sunset at Ku De Ta</h4><p>The original Bali beach club. Get there at 5pm, order a cocktail, watch the sun go down. Classic for a reason.</p></div></li><li class="ti"><div class="tnum">2</div><div><h4>Dinner at Merah Putih</h4><p>Most beautiful restaurant building in Bali. Elevated Indonesian food. Book 2 days ahead.</p></div></li><li class="ti"><div class="tnum">3</div><div><h4>Shopping on Jalan Laksmana</h4><p>Independent boutiques, local designers, beautiful homeware.</p></div></li></ul><div style="margin-top:2rem"><div class="sbc"><h4>Nearby</h4><div class="nearby"><span class="nbchip" onclick="go('canggu')">Canggu →</span><span class="nbchip" onclick="go('uluwatu')">Uluwatu →</span><span class="nbchip" onclick="go('ubud')">Ubud →</span></div></div></div></div><div><div class="sbc"><h4>Quick Info</h4><div class="ir"><span>From airport</span><span>~25 min</span></div><div class="ir"><span>Budget/day</span><span><span class="cur">€</span>60–150</span></div><div class="ir"><span>Best for</span><span>Food, luxury, sunsets</span></div></div><div class="sbc dkc"><h4>Need Help?</h4><p>Andrea has Seminyak restaurant tips.</p><button class="bgold" style="width:100%">WhatsApp Andrea</button></div></div></div></div></div>
+
+<div id="pg-sidemen" class="pg"><div class="dhero"><div class="dbg" style="background-image:url('https://images.unsplash.com/photo-1580655653885-65763b2597d1?w=1400&auto=format&fit=crop&q=80')"></div><div class="dov"></div><div style="position:relative;z-index:1"><button class="back" onclick="go('places')">← All destinations</button><h1 class="dh">Sidemen</h1><p class="ds">The most beautiful valley in Bali that most tourists have never heard of.</p></div></div><div class="dbody"><div class="dlayout"><div><div class="opinion"><div class="eye">ANDREA'S TAKE</div><p>Sidemen is my favourite place in Bali that I almost never tell anyone about. And then I feel guilty and tell everyone. It's a wide valley in east Bali, framed by terraced rice paddies and the enormous silhouette of Mount Agung. Almost no tourists. Guesthouses are cheap. The food is real local cooking.</p><p>Come here for at least one night. Stay in a rice field guesthouse, wake up before dawn, sit on your balcony, and watch the mountain appear as the mist clears.</p></div><ul class="tlist"><li class="ti"><div class="tnum">1</div><div><h4>Wake Up Before Sunrise</h4><p>Set your alarm for 5am. Watch Mount Agung materialize from the mist. One of the most beautiful natural moments I've witnessed anywhere on earth.</p></div></li><li class="ti"><div class="tnum">2</div><div><h4>Walk Through the Rice Fields</h4><p>No guides, no tour, no payment. Just walk. Follow the paths through the paddies.</p></div></li><li class="ti"><div class="tnum">3</div><div><h4>Traditional Weaving Villages</h4><p>The women of Sidemen are famous for their traditional ikat weaving. Visit a family workshop — you can buy directly from the weavers.</p></div></li><li class="ti"><div class="tnum">4</div><div><h4>River Swimming</h4><p>The Unda River runs through the valley. Ask locals to point you to the best swimming spot.</p></div></li></ul><div style="margin-top:2rem"><div class="sbc"><h4>Nearby</h4><div class="nearby"><span class="nbchip" onclick="go('ubud')">Ubud →</span><span class="nbchip" onclick="go('amed')">Amed →</span><span class="nbchip" onclick="go('nusa')">Nusa Penida →</span></div></div></div></div><div><div class="sbc"><h4>Quick Info</h4><div class="ir"><span>From Ubud</span><span>~1.5 hours</span></div><div class="ir"><span>Budget/night</span><span><span class="cur">€</span>20–45</span></div><div class="ir"><span>Tourists</span><span>Almost none</span></div><div class="ir"><span>Min. stay</span><span>1 night</span></div></div><div class="sbc" style="background:rgba(212,168,83,.08);border-color:rgba(212,168,83,.25)"><h4 style="color:var(--gold)">Andrea's Hidden Pick</h4><p style="font-size:.83rem;line-height:1.7;color:#3A3530">Stay at Sawah Indah guesthouse — rice field views, friendly family, <span class="cur">€</span>25/night. The breakfast on the balcony with Mount Agung behind you is extraordinary.</p></div><div class="sbc dkc"><h4>Need Help?</h4><p>Andrea knows the best guesthouses and drivers for Sidemen.</p><button class="bgold" style="width:100%">WhatsApp Andrea</button></div></div></div></div></div>
+
+<div id="pg-amed" class="pg"><div class="dhero"><div class="dbg" style="background-image:url('https://images.unsplash.com/photo-1553361371-9b22f78e8b1d?w=1400&auto=format&fit=crop&q=80')"></div><div class="dov"></div><div style="position:relative;z-index:1"><button class="back" onclick="go('places')">← All destinations</button><h1 class="dh">Amed</h1><p class="ds">Black sand beaches, a shipwreck, and the most honest local feeling left in Bali.</p></div></div><div class="dbody"><div class="dlayout"><div><div class="opinion"><div class="eye">ANDREA'S TAKE</div><p>Amed is three hours from the airport and three decades from the Bali most people visit. Black volcanic sand beaches. Traditional fishing villages. The USS Liberty shipwreck sitting in 30m of water just off the shore at Tulamben. Spectacular snorkeling and diving. Almost no traffic. A quietness that's increasingly hard to find on this island.</p></div><ul class="tlist"><li class="ti"><div class="tnum">1</div><div><h4>USS Liberty Shipwreck, Tulamben</h4><p>A WWII cargo ship in 5–30m of water, completely encrusted with coral. You can snorkel the shallower sections without diving experience.</p></div></li><li class="ti"><div class="tnum">2</div><div><h4>Sunrise Over Mount Agung</h4><p>Wake up early and watch the volcano catch the first light of day with the black sand beach and fishing boats going out.</p></div></li><li class="ti"><div class="tnum">3</div><div><h4>Snorkel from the Shore</h4><p>The coral gardens at Jemeluk Bay are particularly good and completely free to access.</p></div></li><li class="ti"><div class="tnum">4</div><div><h4>Local Fishing Village Walk</h4><p>Walk through the fishing villages north of the main strip. Salt farms, traditional boats being repaired. Genuine local life.</p></div></li></ul><div style="margin-top:2rem"><div class="sbc"><h4>Nearby</h4><div class="nearby"><span class="nbchip" onclick="go('sidemen')">Sidemen →</span><span class="nbchip" onclick="go('ubud')">Ubud →</span><span class="nbchip" onclick="go('nusa')">Nusa Penida →</span></div></div></div></div><div><div class="sbc"><h4>Quick Info</h4><div class="ir"><span>From Ubud</span><span>~2 hours</span></div><div class="ir"><span>From airport</span><span>~3 hours</span></div><div class="ir"><span>Budget/night</span><span><span class="cur">€</span>25–60</span></div><div class="ir"><span>Vibe</span><span>Quiet, diving, local</span></div><div class="ir"><span>Min. stay</span><span>2 nights</span></div></div><div class="sbc" style="background:rgba(212,168,83,.08);border-color:rgba(212,168,83,.25)"><h4 style="color:var(--gold)">Andrea's Tip</h4><p style="font-size:.83rem;line-height:1.7;color:#3A3530">Hire Ketut Suwitra from Ubud — he knows the Amed area extremely well. Don't try to navigate the Amed coast alone on your first visit.</p></div><div class="sbc dkc"><h4>Need Help?</h4><p>Andrea will connect you with the right driver and guesthouse for Amed.</p><button class="bgold" style="width:100%">WhatsApp Andrea</button></div></div></div></div></div>
+
+<!-- ═══ HIDDEN GEMS ═══ -->
+<div id="pg-gems" class="pg">
+  <div class="sec" style="padding-top:3rem">
+    <div class="eye">HIDDEN GEMS</div>
+    <h2 class="sh">Places most tourists never find</h2>
+    <p class="sp">Andrea's personal discoveries — spots she found by accident, by following locals, or by taking a wrong turn at the right moment.</p>
+    <div class="gems-grid">
+      <div class="gem"><div class="gem-img"><img src="https://images.unsplash.com/photo-1553361371-9b22f78e8b1d?w=600&auto=format&fit=crop&q=80" alt="Jatiluwih"><div class="gem-secret">🤫 Secret Spot</div></div><div class="gem-body"><div class="gem-loc">CENTRAL BALI · RICE FIELDS</div><div class="gem-title">Jatiluwih Rice Terraces</div><p class="gem-desc">UNESCO-listed rice terraces two hours from Ubud that get a fraction of Tegallalang's visitors. Vast, green, quiet. The road there is part of the experience.</p><div class="gem-andrea">"I spent three hours here and saw maybe 12 other tourists. In Bali. In high season." — Andrea</div></div></div>
+      <div class="gem"><div class="gem-img"><img src="https://images.unsplash.com/photo-1518548419970-58e3b4079ab2?w=600&auto=format&fit=crop&q=80" alt="Amed Coves"><div class="gem-secret">🤫 Secret Spot</div></div><div class="gem-body"><div class="gem-loc">EAST BALI · COASTAL</div><div class="gem-title">Amed's Hidden Northern Coves</div><p class="gem-desc">Drive past the main Amed strip and keep going north. Small fishing villages, black sand, and coves with almost no tourists. Snorkeling off the rocks is spectacular and free.</p><div class="gem-andrea">"This is the Bali I came to Bali to find. Empty. Beautiful. Real." — Andrea</div></div></div>
+      <div class="gem"><div class="gem-img"><img src="https://images.unsplash.com/photo-1555400038-63f5ba517a47?w=600&auto=format&fit=crop&q=80" alt="Sidemen Sunrise"><div class="gem-secret">🤫 Local Favourite</div></div><div class="gem-body"><div class="gem-loc">CENTRAL BALI · VALLEY</div><div class="gem-title">Sidemen Valley at Sunrise</div><p class="gem-desc">Wake up before 5am, walk to the edge of the village, and watch the mist rise from the valley as Mount Agung turns pink. One of the most beautiful natural moments I've witnessed anywhere on earth.</p><div class="gem-andrea">"Set your alarm. You will not regret it." — Andrea</div></div></div>
+      <div class="gem"><div class="gem-img"><img src="https://images.unsplash.com/photo-1604928141064-207cea6f571f?w=600&auto=format&fit=crop&q=80" alt="Shady Shack"><div class="gem-secret">🤫 Local's Pick</div></div><div class="gem-body"><div class="gem-loc">CANGGU · CAFÉ</div><div class="gem-title">The Shady Shack</div><p class="gem-desc">A tiny plant-based café hidden behind a gate off a back road in Canggu. Bamboo tables in a garden, smoothie bowls, and coffee grown sustainably on the island. No sign. You just have to know it's there.</p><div class="gem-andrea">"The best breakfast in Canggu. And I've had a lot of breakfasts in Canggu." — Andrea</div></div></div>
+      <div class="gem"><div class="gem-img"><img src="https://images.unsplash.com/photo-1580655653885-65763b2597d1?w=600&auto=format&fit=crop&q=80" alt="Aling-Aling"><div class="gem-secret">🤫 Locals Only</div></div><div class="gem-body"><div class="gem-loc">NORTH BALI · WATERFALLS</div><div class="gem-title">Aling-Aling Waterfall</div><p class="gem-desc">A series of four waterfalls in the north Bali highlands. You can slide down two of them naturally into pools. Three hours from Ubud. Completely worth the drive.</p><div class="gem-andrea">"The waterfall slide is the most fun I've had in Bali. I'm a 30-year-old woman. Still." — Andrea</div></div></div>
+      <div class="gem"><div class="gem-img"><img src="https://images.unsplash.com/photo-1537996194471-e657df975ab4?w=600&auto=format&fit=crop&q=80" alt="Nyang Nyang"><div class="gem-secret">🤫 Hidden Beach</div></div><div class="gem-body"><div class="gem-loc">ULUWATU · BEACH</div><div class="gem-title">Nyang Nyang Beach</div><p class="gem-desc">500 steps down a cliff. 500 steps back up. An almost completely empty 1km stretch of white sand at the bottom. Worth every step. Bring water.</p><div class="gem-andrea">"The hardest beach to reach in Bali and almost certainly the most beautiful." — Andrea</div></div></div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ FOOD ═══ -->
+<div id="pg-food" class="pg">
+  <div class="sec" style="padding-top:3rem">
+    <div class="eye">FOOD & CAFÉS</div><h2 class="sh">Where Andrea eats</h2><p class="sp">No star ratings. No sponsorships. Just: would she come back or not?</p>
+    <h3 style="font-size:.73rem;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);margin-bottom:1.2rem">☕ CAFÉS</h3>
+    <div class="cgrid" style="margin-bottom:3rem">
+      <div class="rvc"><div class="rvi"><img src="https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?w=600&auto=format&fit=crop&q=80" alt="C1"></div><div class="rvb"><div class="rvtype">☕ Café · Ubud</div><div class="rvt">Café Pomegranate</div><p class="rvp">Rice field views, best cold brew in Bali, avocado toast that holds its own against any European café.</p><div class="rvv">"I'd come back every single morning." — Andrea</div><div class="rvf"><span class="pp"><span class="cur">€</span>4–8</span><span class="op">7am–5pm · Ubud</span></div></div></div>
+      <div class="rvc"><div class="rvi"><img src="https://images.unsplash.com/photo-1580655653885-65763b2597d1?w=600&auto=format&fit=crop&q=80" alt="C2"></div><div class="rvb"><div class="rvtype">☕ Café · Canggu</div><div class="rvt">Hungry Bird Coffee</div><p class="rvp">Serious specialty coffee, no pretension. The baristas actually know what they're doing.</p><div class="rvv">"Every time I'm in Canggu, this is my first stop." — Andrea</div><div class="rvf"><span class="pp"><span class="cur">€</span>3–6</span><span class="op">7am–6pm · Canggu</span></div></div></div>
+      <div class="rvc"><div class="rvi"><img src="https://images.unsplash.com/photo-1529156069898-49953e39b3ac?w=600&auto=format&fit=crop&q=80" alt="C3"></div><div class="rvb"><div class="rvtype">☕ Café · Seminyak</div><div class="rvt">Revolver Espresso</div><p class="rvp">Hidden down a tiny alley. Incredible coffee, cool design. The kind of place you feel clever for knowing about.</p><div class="rvv">"Worth the hunt every single time." — Andrea</div><div class="rvf"><span class="pp"><span class="cur">€</span>4–7</span><span class="op">7am–5pm · Seminyak</span></div></div></div>
+    </div>
+    <h3 style="font-size:.73rem;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);margin-bottom:1.2rem">🍜 RESTAURANTS & WARUNGS</h3>
+    <div class="cgrid">
+      <div class="rvc"><div class="rvi"><img src="https://images.unsplash.com/photo-1563245372-f21724e3856d?w=600&auto=format&fit=crop&q=80" alt="R1"></div><div class="rvb"><div class="rvtype">🍜 Warung · Ubud</div><div class="rvt">Warung Babi Guling Pak Malen</div><p class="rvp">Suckling pig rice. Life-changing sambal. Get there before 11am — they sell out every day.</p><div class="rvv">"Good but I wouldn't wait more than 20 min." — Andrea</div><div class="rvf"><span class="pp"><span class="cur">€</span>4–6</span><span class="op">8am–2pm · Ubud</span></div></div></div>
+      <div class="rvc"><div class="rvi"><img src="https://images.unsplash.com/photo-1609137144813-7d9921338f24?w=600&auto=format&fit=crop&q=80" alt="R2"></div><div class="rvb"><div class="rvtype">🌿 Plant-Based · Ubud</div><div class="rvt">Moksa</div><p class="rvp">Everything grown in their permaculture garden. Even if you eat meat, go once. The jungle setting is extraordinary.</p><div class="rvv">"This changed how I think about food." — Andrea</div><div class="rvf"><span class="pp"><span class="cur">€</span>12–20</span><span class="op">11am–10pm · Ubud</span></div></div></div>
+      <div class="rvc"><div class="rvi"><img src="https://images.unsplash.com/photo-1537996194471-e657df975ab4?w=600&auto=format&fit=crop&q=80" alt="R3"></div><div class="rvb"><div class="rvtype">🦞 Fine Dining · Seminyak</div><div class="rvt">Merah Putih</div><p class="rvp">Most beautiful restaurant building in Bali. Elevated Indonesian food. The sate lilit is extraordinary. Book 2 days ahead.</p><div class="rvv">"One of the best meals of my life. Anywhere." — Andrea</div><div class="rvf"><span class="pp"><span class="cur">€</span>35–60pp</span><span class="op">Seminyak</span></div></div></div>
+      <div class="rvc"><div class="rvi"><img src="https://images.unsplash.com/photo-1571896349842-33c89424de2d?w=600&auto=format&fit=crop&q=80" alt="R4"></div><div class="rvb"><div class="rvtype">🎣 Seafood · Jimbaran</div><div class="rvt">Jimbaran Fish Market</div><p class="rvp">Pick your fish directly from the market, they grill it on the beach while you watch the sunset. Completely magical.</p><div class="rvv">"Do this at least once. It's quintessential Bali." — Andrea</div><div class="rvf"><span class="pp"><span class="cur">€</span>15–30pp</span><span class="op">Sunset · Jimbaran</span></div></div></div>
+      <div class="rvc"><div class="rvi"><img src="https://images.unsplash.com/photo-1553361371-9b22f78e8b1d?w=600&auto=format&fit=crop&q=80" alt="R5"></div><div class="rvb"><div class="rvtype">🍵 Dessert · Ubud</div><div class="rvt">Room 4 Dessert</div><p class="rvp">A dessert tasting menu. Sounds gimmicky. One of the most creative dining experiences on the island. Book weeks ahead.</p><div class="rvv">"I went for the photo, stayed for the actual food." — Andrea</div><div class="rvf"><span class="pp"><span class="cur">€</span>40–60pp</span><span class="op">Booking essential</span></div></div></div>
+      <div class="rvc"><div class="rvi"><img src="https://images.unsplash.com/photo-1580655653885-65763b2597d1?w=600&auto=format&fit=crop&q=80" alt="R6"></div><div class="rvb"><div class="rvtype">🍛 Local · Everywhere</div><div class="rvt">Your local warung (any warung)</div><p class="rvp">The most authentic, cheapest, and often most delicious meals in Bali. Plastic chairs. No WiFi. No English menu. Perfect.</p><div class="rvv">"Stop overthinking it. Just go in." — Andrea</div><div class="rvf"><span class="pp"><span class="cur">€</span>1.50–4</span><span class="op">Everywhere</span></div></div></div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ HOTELS ═══ -->
+<div id="pg-hotels" class="pg">
+  <div class="sec" style="padding-top:3rem">
+    <div class="eye">HOTELS & VILLAS</div><h2 class="sh">Where Andrea would actually sleep</h2><p class="sp">Every place Andrea has personally stayed in or visited. Organized by budget.</p>
+    <h3 style="font-size:.73rem;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);margin-bottom:1.2rem">💎 LUXURY — from <span class="cur">€</span>200/night</h3>
+    <div class="cgrid" style="margin-bottom:2.5rem">
+      <div class="rvc"><div class="rvi"><img src="https://images.unsplash.com/photo-1571896349842-33c89424de2d?w=600&auto=format&fit=crop&q=80" alt="H1"></div><div class="rvb"><div class="rvtype">🏨 Luxury · Ubud</div><div class="rvt">Komaneka at Bisma</div><p class="rvp">Infinity pool over the jungle canopy. Spectacular breakfast. Feel like a different person after 3 nights.</p><div class="rvv">"Splurge on this one. You won't regret it." — Andrea</div><div class="rvf"><span class="pp">from <span class="cur">€</span>280/night</span><span class="op">Pool · Breakfast</span></div></div></div>
+      <div class="rvc"><div class="rvi"><img src="https://images.unsplash.com/photo-1609137144813-7d9921338f24?w=600&auto=format&fit=crop&q=80" alt="H2"></div><div class="rvb"><div class="rvtype">🏨 Luxury · Seminyak</div><div class="rvt">W Bali Seminyak</div><p class="rvp">Beach access, amazing pool, fantastic location. Cocktails at sunset on the beach are an experience in themselves.</p><div class="rvv">"Best luxury option in south Bali." — Andrea</div><div class="rvf"><span class="pp">from <span class="cur">€</span>320/night</span><span class="op">Beach · Pool</span></div></div></div>
+      <div class="rvc"><div class="rvi"><img src="https://images.unsplash.com/photo-1580655653885-65763b2597d1?w=600&auto=format&fit=crop&q=80" alt="H3"></div><div class="rvb"><div class="rvtype">🏨 Luxury · Uluwatu</div><div class="rvt">Alila Villas Uluwatu</div><p class="rvp">Clifftop villas with private pools and Indian Ocean views. The architecture alone is worth the trip.</p><div class="rvv">"Spent 3 days barely leaving the villa. Zero regrets." — Andrea</div><div class="rvf"><span class="pp">from <span class="cur">€</span>500/night</span><span class="op">Private pool · Cliff</span></div></div></div>
+    </div>
+    <h3 style="font-size:.73rem;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);margin-bottom:1.2rem">✦ MID RANGE — <span class="cur">€</span>80–200/night</h3>
+    <div class="cgrid" style="margin-bottom:2.5rem">
+      <div class="rvc"><div class="rvi"><img src="https://images.unsplash.com/photo-1553361371-9b22f78e8b1d?w=600&auto=format&fit=crop&q=80" alt="H4"></div><div class="rvb"><div class="rvtype">🏨 Mid Range · Ubud</div><div class="rvt">Bisma Eight</div><p class="rvp">Infinity pool, rice field views, excellent breakfast. Best value for money in Ubud. Book the jungle suite.</p><div class="rvv">"Would absolutely stay here again." — Andrea</div><div class="rvf"><span class="pp">from <span class="cur">€</span>130/night</span><span class="op">Pool · Breakfast</span></div></div></div>
+      <div class="rvc"><div class="rvi"><img src="https://images.unsplash.com/photo-1529156069898-49953e39b3ac?w=600&auto=format&fit=crop&q=80" alt="H5"></div><div class="rvb"><div class="rvtype">🏨 Mid Range · Canggu</div><div class="rvt">Desa Potato Head</div><p class="rvp">Part hotel, part arts destination. Pool, beach club, 3 restaurants, a cinema, and a vinyl library.</p><div class="rvv">"Stay here if you want to feel like you're in a film." — Andrea</div><div class="rvf"><span class="pp">from <span class="cur">€</span>180/night</span><span class="op">Beach · Pool · Arts</span></div></div></div>
+    </div>
+    <h3 style="font-size:.73rem;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);margin-bottom:1.2rem">○ BUDGET — under <span class="cur">€</span>80/night</h3>
+    <div class="cgrid">
+      <div class="rvc"><div class="rvi"><img src="https://images.unsplash.com/photo-1537996194471-e657df975ab4?w=600&auto=format&fit=crop&q=80" alt="H6"></div><div class="rvb"><div class="rvtype">🏨 Budget · Canggu</div><div class="rvt">The Layar Canggu</div><p class="rvp">Clean, well-run, great café downstairs, walking distance to Echo Beach.</p><div class="rvv">"Best value I've found in Canggu." — Andrea</div><div class="rvf"><span class="pp">from <span class="cur">€</span>45/night</span><span class="op">Café · Central</span></div></div></div>
+      <div class="rvc"><div class="rvi"><img src="https://images.unsplash.com/photo-1571896349842-33c89424de2d?w=600&auto=format&fit=crop&q=80" alt="H7"></div><div class="rvb"><div class="rvtype">🏨 Budget · Ubud</div><div class="rvt">Puri Garden Hotel</div><p class="rvp">Central, clean, genuinely lovely staff. A beautiful garden to sit in. Honest and well-run.</p><div class="rvv">"Reliable. I'd happily stay here again." — Andrea</div><div class="rvf"><span class="pp">from <span class="cur">€</span>35/night</span><span class="op">Garden · Central</span></div></div></div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ EXPERIENCES ═══ -->
+<div id="pg-exp" class="pg">
+  <div class="sec" style="padding-top:3rem">
+    <div class="eye">EXPERIENCES</div><h2 class="sh">Things actually worth doing</h2><p class="sp">Activities Andrea has done herself. No gimmicks.</p>
+    <div class="expgrid">
+      <div class="expc"><div class="expi"><img src="https://images.unsplash.com/photo-1518548419970-58e3b4079ab2?w=600&auto=format&fit=crop&q=80" alt="E1"></div><div class="expb"><div class="exptag">NATURE · ADVENTURE</div><div class="exptit">Mount Batur Sunrise Trek</div><p class="expdesc">Start at 2am. Reach the summit by sunrise. Active volcano. The caldera view in morning light is something you don't forget for years.</p><div class="expft"><span class="pp">~<span class="cur">€</span>30–50</span><span class="op">4–5 hours</span></div></div></div>
+      <div class="expc"><div class="expi"><img src="https://images.unsplash.com/photo-1555400038-63f5ba517a47?w=600&auto=format&fit=crop&q=80" alt="E2"></div><div class="expb"><div class="exptag">CULTURE · FOOD</div><div class="exptit">Balinese Cooking Class</div><p class="expdesc">Starts with a market tour, ends with eating what you cooked. Learn nasi goreng, satay, and sambal from a local family.</p><div class="expft"><span class="pp">~<span class="cur">€</span>35–55</span><span class="op">4 hours</span></div></div></div>
+      <div class="expc"><div class="expi"><img src="https://images.unsplash.com/photo-1604928141064-207cea6f571f?w=600&auto=format&fit=crop&q=80" alt="E3"></div><div class="expb"><div class="exptag">OCEAN · WILDLIFE</div><div class="exptit">Manta Ray Snorkeling</div><p class="expdesc">Swimming alongside 3-metre manta rays in the open ocean. One of the most surreal experiences of Andrea's life. Book early morning.</p><div class="expft"><span class="pp">~<span class="cur">€</span>25–45</span><span class="op">3 hours · Nusa Penida</span></div></div></div>
+      <div class="expc"><div class="expi"><img src="https://images.unsplash.com/photo-1537996194471-e657df975ab4?w=600&auto=format&fit=crop&q=80" alt="E4"></div><div class="expb"><div class="exptag">WELLNESS</div><div class="exptit">Traditional Balinese Massage</div><p class="expdesc">90 minutes of deep tissue work. Go to a local spa in Ubud — not the tourist strip places. Budget <span class="cur">€</span>8–12 for the real thing.</p><div class="expft"><span class="pp"><span class="cur">€</span>8–12</span><span class="op">90 minutes · Ubud</span></div></div></div>
+      <div class="expc"><div class="expi"><img src="https://images.unsplash.com/photo-1580655653885-65763b2597d1?w=600&auto=format&fit=crop&q=80" alt="E5"></div><div class="expb"><div class="exptag">ADVENTURE</div><div class="exptit">ATV Quad Through Rice Fields</div><p class="expdesc">An hour of bouncing through muddy rice fields and jungle tracks. More fun than it sounds. The guides are great.</p><div class="expft"><span class="pp">~<span class="cur">€</span>35–50</span><span class="op">2 hours</span></div></div></div>
+      <div class="expc"><div class="expi"><img src="https://images.unsplash.com/photo-1529156069898-49953e39b3ac?w=600&auto=format&fit=crop&q=80" alt="E6"></div><div class="expb"><div class="exptag">SURF</div><div class="exptit">Beginner Surf Lessons</div><p class="expdesc">Go to Kuta (long, flat beach — perfect for beginners) or Bingin if you're intermediate. 2-hour lesson, equipment included.</p><div class="expft"><span class="pp"><span class="cur">€</span>20–35</span><span class="op">2 hours · Equipment incl.</span></div></div></div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ GUIDE ═══ -->
+<div id="pg-guide" class="pg">
+  <div class="ghero"><div class="dbg" style="background-image:url('https://images.unsplash.com/photo-1537996194471-e657df975ab4?w=1400&auto=format&fit=crop&q=80');height:100%"></div><div class="dov" style="position:absolute;inset:0"></div><div style="position:relative;z-index:1;padding:2.5rem 3rem;display:flex;align-items:flex-end;height:100%"><div><button class="back" onclick="go('home')">← Back</button><h1 class="dh">Bali Travel Guide</h1><p class="ds">Everything you need to know before you arrive. The practical stuff nobody blogs about.</p></div></div></div>
+  <div class="guidebody">
+    <div class="eye">THE ESSENTIALS</div>
+    <h1 style="font-family:var(--serif);font-size:2.2rem;font-weight:400;margin-bottom:2rem">Andrea's complete Bali guide</h1>
+    <h2>Getting there & visas</h2>
+    <p>Ngurah Rai International Airport (DPS). From Europe, 16–20 hours with one connection — Singapore, KL, and Doha are the most common hubs. Book 3+ months ahead. Most nationalities get a free 30-day visa on arrival, extendable once. Indonesia introduced the Bali Tourism Levy in 2024 — IDR 150,000 (~<span class="cur">€</span>9) per person. Keep your receipt.</p>
+    <div class="gtips">
+      <div class="gtip"><div class="gtip-ico">🛵</div><h4>Getting Around</h4><p>Rent a scooter (~<span class="cur">€</span>5/day). Hire a driver for day trips (~<span class="cur">€</span>35–50). Use Grab for local taxis. Avoid airport exchange — rates are terrible.</p></div>
+      <div class="gtip"><div class="gtip-ico">💰</div><h4>Money</h4><p>Indonesian Rupiah (IDR). BCA and Mandiri ATMs have the best rates. Always carry cash — small warungs and markets are cash-only.</p></div>
+      <div class="gtip"><div class="gtip-ico">📱</div><h4>SIM Card</h4><p>Buy a Telkomsel SIM at the airport. ~<span class="cur">€</span>5 for 30 days of data. Essential for Grab, Google Maps, WhatsApp.</p></div>
+      <div class="gtip"><div class="gtip-ico">🌡</div><h4>Weather</h4><p>Dry season May–October. Wet season Nov–April — cheaper, fewer tourists. My favourite: September/October.</p></div>
+      <div class="gtip"><div class="gtip-ico">🏥</div><h4>Health</h4><p>No required vaccinations. Dengue is real — use DEET. BIMC Kuta is the best private hospital. Never drink tap water.</p></div>
+      <div class="gtip"><div class="gtip-ico">🕌</div><h4>Culture & Respect</h4><p>Cover shoulders and knees at temples. Step over (never on) offerings on the ground. Ask before photographing ceremonies.</p></div>
+      <div class="gtip"><div class="gtip-ico">🌊</div><h4>Ocean Safety</h4><p>Strong rip currents exist. Swim between flags. Kuta and Seminyak have lifeguards. Always ask locals before swimming at unfamiliar beaches.</p></div>
+      <div class="gtip"><div class="gtip-ico">🎒</div><h4>What to Pack</h4><p>Light clothing only. Reef-safe sunscreen. A sarong. Packable rain jacket for wet season. 40L backpack is enough.</p></div>
+    </div>
+    <h2>Before You Go — 10 things to sort</h2>
+    <div class="byg-grid">
+      <div class="byg-item"><div class="byg-num">1</div><div><h4>Book airport transfer in advance</h4><p>Do it before you land. Negotiating taxi prices while jet-lagged and surrounded by touts is not how you want to start your Bali trip.</p></div></div>
+      <div class="byg-item"><div class="byg-num">2</div><div><h4>Download Grab before you fly</h4><p>The ride-hailing app for Southeast Asia. Set up your account at home while you have stable WiFi.</p></div></div>
+      <div class="byg-item"><div class="byg-num">3</div><div><h4>Get travel insurance</h4><p>Medical evacuation from Bali is expensive. Get insurance that covers it. Safety Wing and Heymondo are good for longer stays.</p></div></div>
+      <div class="byg-item"><div class="byg-num">4</div><div><h4>Notify your bank</h4><p>Tell them you're traveling to Indonesia or your card may get blocked at the first ATM. Takes 2 minutes.</p></div></div>
+      <div class="byg-item"><div class="byg-num">5</div><div><h4>Book at least your first two nights</h4><p>Arrive with a place to sleep sorted. Landing without accommodation after a 20-hour journey is a bad start.</p></div></div>
+      <div class="byg-item"><div class="byg-num">6</div><div><h4>Save offline Google Maps</h4><p>Download the Bali region before you fly. Mobile data works most of the time but rural areas can be spotty.</p></div></div>
+      <div class="byg-item"><div class="byg-num">7</div><div><h4>Buy reef-safe sunscreen now</h4><p>Regular sunscreen is banned in many dive and snorkeling areas. Buy reef-safe before you go — it's cheaper in Europe than in Bali.</p></div></div>
+      <div class="byg-item"><div class="byg-num">8</div><div><h4>Pack a sarong</h4><p>You need one for temples. It doubles as a beach towel, a picnic blanket, and a light blanket on the plane.</p></div></div>
+      <div class="byg-item"><div class="byg-num">9</div><div><h4>Learn three words of Indonesian</h4><p>"Terima kasih" (thank you), "selamat pagi" (good morning), "berapa harga?" (how much?). Worth 10 minutes of your time.</p></div></div>
+      <div class="byg-item"><div class="byg-num">10</div><div><h4>Message Andrea</h4><p>Her WhatsApp is always open for trip questions. She doesn't earn commission. She just loves helping people have a better Bali trip.</p></div></div>
+    </div>
+    <div style="margin-top:2.5rem;display:flex;gap:1rem;flex-wrap:wrap"><button class="bp" onclick="go('tools')">Open Travel Tools →</button><button class="bg" onclick="go('plan')">Plan my trip</button></div>
+  </div>
+</div>
+
+<!-- ═══ TOOLS ═══ -->
+<div id="pg-tools" class="pg">
+  <div class="sec" style="padding-top:3rem">
+    <div class="eye">TRAVEL TOOLS</div>
+    <h2 class="sh">Useful tools for your Bali trip</h2>
+    <p class="sp">Currency converter and packing list — everything practical in one place.</p>
+    <h3 style="font-size:.75rem;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);margin-bottom:1.5rem">💱 CURRENCY CONVERTER</h3>
+    <div class="conv-wrap" style="margin-bottom:3rem">
+      <div class="conv-title">How much is that in Rupiah?</div>
+      <div class="conv-sub">Approximate rates. Always check before exchanging large amounts.</div>
+      <div class="conv-row">
+        <div class="conv-field"><label id="conv-lbl">Amount (EUR)</label><input type="number" id="conv-from" value="100" oninput="convertCurrency()" min="0"></div>
+        <div class="conv-arrow">→</div>
+        <div class="conv-field"><label>Indonesian Rupiah (IDR)</label><input type="number" id="conv-to" readonly style="background:var(--sand);cursor:not-allowed"></div>
+      </div>
+      <div class="cur-btns">
+        <button class="cbtn on" id="btn-EUR" onclick="setFromCur('EUR')">€ EUR</button>
+        <button class="cbtn off" id="btn-USD" onclick="setFromCur('USD')">$ USD</button>
+        <button class="cbtn off" id="btn-GBP" onclick="setFromCur('GBP')">£ GBP</button>
+        <button class="cbtn off" id="btn-RON" onclick="setFromCur('RON')">lei RON</button>
+        <button class="cbtn off" id="btn-HUF" onclick="setFromCur('HUF')">Ft HUF</button>
+      </div>
+      <div class="rate-grid">
+        <div class="rate-card"><div class="rc-flag">🍜</div><div class="rc-lbl">Warung meal</div><div class="rc-val" id="r-warung">—</div></div>
+        <div class="rate-card"><div class="rc-flag">☕</div><div class="rc-lbl">Coffee</div><div class="rc-val" id="r-coffee">—</div></div>
+        <div class="rate-card"><div class="rc-flag">🛵</div><div class="rc-lbl">Scooter/day</div><div class="rc-val" id="r-scooter">—</div></div>
+        <div class="rate-card"><div class="rc-flag">💆</div><div class="rc-lbl">Massage 90m</div><div class="rc-val" id="r-massage">—</div></div>
+        <div class="rate-card"><div class="rc-flag">🏨</div><div class="rc-lbl">Budget hotel/night</div><div class="rc-val" id="r-hotel">—</div></div>
+        <div class="rate-card"><div class="rc-flag">🍺</div><div class="rc-lbl">Bintang beer</div><div class="rc-val" id="r-beer">—</div></div>
+      </div>
+      <div class="conv-note">Approx. rates: 1 EUR ≈ 17,000 IDR · 1 USD ≈ 15,800 IDR · 1 GBP ≈ 20,100 IDR · 1 RON ≈ 3,400 IDR · 100 HUF ≈ 4,200 IDR</div>
+    </div>
+    <h3 style="font-size:.75rem;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);margin-bottom:1.5rem">🎒 ANDREA'S PACKING LIST</h3>
+    <div class="pack-progress">
+      <div class="pack-pct" id="pack-pct">0%</div>
+      <div class="pack-bar-wrap"><div class="pack-bar-bg"><div class="pack-bar-fill" id="pack-bar" style="width:0%"></div></div><div class="pack-count" id="pack-count">0 of 32 items packed</div></div>
+      <button onclick="resetPack()" style="background:none;border:none;cursor:pointer;font-size:.78rem;color:var(--muted);text-decoration:underline;flex-shrink:0">Reset</button>
+    </div>
+    <div class="pack-grid">
+      <div class="pack-cat"><h3>👕 Clothes</h3><ul class="pack-items"><li class="pack-item" onclick="togglePack(this)"><div class="pchk"></div>Light breathable tops (5–7)</li><li class="pack-item" onclick="togglePack(this)"><div class="pchk"></div>Shorts / light trousers (3)</li><li class="pack-item" onclick="togglePack(this)"><div class="pchk"></div>Swimwear (2)</li><li class="pack-item" onclick="togglePack(this)"><div class="pchk"></div>One smart outfit</li><li class="pack-item" onclick="togglePack(this)"><div class="pchk"></div>Light rain jacket</li><li class="pack-item" onclick="togglePack(this)"><div class="pchk"></div>Sarong (temple & beach)</li><li class="pack-item" onclick="togglePack(this)"><div class="pchk"></div>Comfortable walking sandals</li><li class="pack-item" onclick="togglePack(this)"><div class="pchk"></div>Flip flops</li></ul></div>
+      <div class="pack-cat"><h3>🧴 Health & Hygiene</h3><ul class="pack-items"><li class="pack-item" onclick="togglePack(this)"><div class="pchk"></div>Reef-safe sunscreen SPF50+</li><li class="pack-item" onclick="togglePack(this)"><div class="pchk"></div>DEET mosquito repellent</li><li class="pack-item" onclick="togglePack(this)"><div class="pchk"></div>After-sun lotion</li><li class="pack-item" onclick="togglePack(this)"><div class="pchk"></div>Travel medicine kit</li><li class="pack-item" onclick="togglePack(this)"><div class="pchk"></div>Antihistamine (insect bites)</li><li class="pack-item" onclick="togglePack(this)"><div class="pchk"></div>Imodium (trust Andrea on this)</li><li class="pack-item" onclick="togglePack(this)"><div class="pchk"></div>Hand sanitizer</li></ul></div>
+      <div class="pack-cat"><h3>📱 Tech & Documents</h3><ul class="pack-items"><li class="pack-item" onclick="togglePack(this)"><div class="pchk"></div>Passport (valid 6+ months)</li><li class="pack-item" onclick="togglePack(this)"><div class="pchk"></div>Travel insurance docs</li><li class="pack-item" onclick="togglePack(this)"><div class="pchk"></div>Universal travel adapter</li><li class="pack-item" onclick="togglePack(this)"><div class="pchk"></div>Power bank</li><li class="pack-item" onclick="togglePack(this)"><div class="pchk"></div>Camera / phone charger</li><li class="pack-item" onclick="togglePack(this)"><div class="pchk"></div>Waterproof phone case</li><li class="pack-item" onclick="togglePack(this)"><div class="pchk"></div>Offline maps downloaded</li><li class="pack-item" onclick="togglePack(this)"><div class="pchk"></div>Grab app installed</li></ul></div>
+      <div class="pack-cat"><h3>🎒 Practical Extras</h3><ul class="pack-items"><li class="pack-item" onclick="togglePack(this)"><div class="pchk"></div>Reusable water bottle</li><li class="pack-item" onclick="togglePack(this)"><div class="pchk"></div>Small day backpack</li><li class="pack-item" onclick="togglePack(this)"><div class="pchk"></div>Dry bag (for boats)</li><li class="pack-item" onclick="togglePack(this)"><div class="pchk"></div>Cash in local currency</li><li class="pack-item" onclick="togglePack(this)"><div class="pchk"></div>Snorkel mask (optional)</li><li class="pack-item" onclick="togglePack(this)"><div class="pchk"></div>Book or e-reader</li><li class="pack-item" onclick="togglePack(this)"><div class="pchk"></div>Padlock (for lockers)</li><li class="pack-item" onclick="togglePack(this)"><div class="pchk"></div>Earplugs</li><li class="pack-item" onclick="togglePack(this)"><div class="pchk"></div>Eye mask</li></ul></div>
+    </div>
+    <div style="margin-top:1.5rem;padding:1.2rem 1.5rem;background:var(--sand);border-radius:12px;font-size:.85rem;line-height:1.7;color:#3A3530">💡 <strong>Andrea's golden rule:</strong> If you're packing a 20kg suitcase for Bali, you're doing it wrong. Everything fits in a 40L backpack. You can buy anything you forget in Bali for a fraction of the price anyway.</div>
+  </div>
+</div>
+
+<!-- ═══ PLAN ═══ -->
+<div id="pg-plan" class="pg">
+  <div class="planwrap">
+    <div class="planhd"><div class="eye">PLAN MY TRIP</div><h1>Let Andrea plan your Bali</h1><p>Tell her about you and she'll build an honest, personalized itinerary. No commission. No sponsored hotels. Just her actual recommendations.</p></div>
+    <div class="psec"><h3>I'm traveling as a...</h3><div class="ogrid"><div class="opt on" onclick="selO(this)"><div class="oico">💑</div><h3>Couple</h3><p>Romantic & shared adventures</p></div><div class="opt" onclick="selO(this)"><div class="oico">🎒</div><h3>Solo Traveler</h3><p>Freedom & flexibility</p></div><div class="opt" onclick="selO(this)"><div class="oico">👨‍👩‍👧</div><h3>Family</h3><p>Kid-friendly, relaxed pace</p></div><div class="opt" onclick="selO(this)"><div class="oico">👯</div><h3>Friends Group</h3><p>Activities & shared villas</p></div></div></div>
+    <div class="psec"><h3>Trip length</h3><div class="durrow"><div class="dur" onclick="selD(this)">3 days</div><div class="dur on" onclick="selD(this)">5 days</div><div class="dur" onclick="selD(this)">7 days</div><div class="dur" onclick="selD(this)">10 days</div><div class="dur" onclick="selD(this)">2 weeks+</div></div></div>
+    <div class="psec"><h3>My vibe</h3><div class="vrow"><div class="vch" onclick="this.classList.toggle('on')">🌿 Nature</div><div class="vch" onclick="this.classList.toggle('on')">🏖 Beach</div><div class="vch" onclick="this.classList.toggle('on')">🍜 Food</div><div class="vch" onclick="this.classList.toggle('on')">🏄 Adventure</div><div class="vch" onclick="this.classList.toggle('on')">✨ Luxury</div><div class="vch" onclick="this.classList.toggle('on')">🧘 Wellness</div><div class="vch" onclick="this.classList.toggle('on')">🎭 Culture</div><div class="vch" onclick="this.classList.toggle('on')">📸 Photography</div><div class="vch" onclick="this.classList.toggle('on')">🤫 Hidden Gems</div></div></div>
+    <div class="psec"><h3>Daily budget</h3><div class="srow"><input type="range" min="30" max="500" value="100" id="bslider" step="10" oninput="updB(this.value)"><span id="bval"><span class="cur">€</span>100</span><span style="color:var(--muted);font-size:.82rem">/day</span></div><div id="bhint">Budget traveler · warungs, guesthouses, scooters</div></div>
+    <button class="bp" style="font-size:.95rem;padding:.95rem 2.2rem" onclick="genI()">Generate my itinerary →</button>
+    <div id="itinbox">
+      <div class="eye">YOUR ITINERARY</div>
+      <h3 style="font-family:var(--serif);font-size:1.4rem;font-weight:400;margin-bottom:1.5rem">Andrea's pick, built for you</h3>
+      <div id="idays"></div>
+      <div class="anote">🌴 <strong>A note from Andrea:</strong> This is a starting point, not a rigid plan. Bali rewards spontaneity. The best moments usually happen when you put the itinerary away.</div>
+      <div style="margin-top:1.8rem;display:flex;gap:1rem;flex-wrap:wrap"><button class="bp" onclick="go('contact')">Ask Andrea a question</button><button class="bg" onclick="go('drivers')">Book a private driver</button><button class="bg" onclick="go('tools')">Open packing list</button></div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ BLOG ═══ -->
+<div id="pg-blog" class="pg">
+  <div class="sec" style="padding-top:3rem">
+    <div class="eye">BLOG</div><h2 class="sh">Andrea's Bali journal</h2><p class="sp">No SEO spam. No sponsored content. Real stories from someone who actually lives here.</p>
+    <div class="bgrid">
+      <div class="blc" onclick="go('post1')"><div class="bli"><img src="https://images.unsplash.com/photo-1553361371-9b22f78e8b1d?w=700&auto=format&fit=crop&q=80" alt="B1"></div><div class="bltag">HONEST TAKES</div><div class="blh">Things I wish I knew before moving to Bali</div><p class="blp">The mosquitoes. The traffic. The magic. Everything nobody puts in a travel brochure.</p><div class="blm">8 min · June 2025</div></div>
+      <div class="blc" onclick="go('post2')"><div class="bli"><img src="https://images.unsplash.com/photo-1580655653885-65763b2597d1?w=700&auto=format&fit=crop&q=80" alt="B2"></div><div class="bltag">TOURIST TRAPS</div><div class="blh">5 places in Bali I'd skip (and what to do instead)</div><p class="blp">If I see one more photo at the Tegallalang swing, I'm moving back to Bucharest.</p><div class="blm">6 min · May 2025</div></div>
+      <div class="blc" onclick="go('post3')"><div class="bli"><img src="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=700&auto=format&fit=crop&q=80" alt="B3"></div><div class="bltag">MONEY</div><div class="blh">Is Bali actually expensive? The honest breakdown.</div><p class="blp">Depends completely on how you travel. Here's what things actually cost.</p><div class="blm">5 min · April 2025</div></div>
+      <div class="blc" onclick="go('post4')"><div class="bli"><img src="https://images.unsplash.com/photo-1571896349842-33c89424de2d?w=700&auto=format&fit=crop&q=80" alt="B4"></div><div class="bltag">HOTELS</div><div class="blh">Where I'd stay if it was my first trip to Bali</div><p class="blp">Organized by budget, location, and what kind of traveler you actually are.</p><div class="blm">7 min · March 2025</div></div>
+      <div class="blc" onclick="go('post5')"><div class="bli"><img src="https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?w=700&auto=format&fit=crop&q=80" alt="B5"></div><div class="bltag">CAFÉS</div><div class="blh">My 12 favourite cafés in Bali (and why I keep going back)</div><p class="blp">Life in Bali is mostly lived from café to café. Here's where I spend my mornings.</p><div class="blm">10 min · Feb 2025</div></div>
+      <div class="blc" onclick="go('post6')"><div class="bli"><img src="https://images.unsplash.com/photo-1529156069898-49953e39b3ac?w=700&auto=format&fit=crop&q=80" alt="B6"></div><div class="bltag">SUNSETS</div><div class="blh">Best sunsets in Bali — ranked by someone who's seen a lot of them</div><p class="blp">Not all sunsets are equal. These are the ones that genuinely stopped me in my tracks.</p><div class="blm">4 min · Jan 2025</div></div>
+      <div class="blc" onclick="go('post7')"><div class="bli"><img src="https://images.unsplash.com/photo-1537996194471-e657df975ab4?w=700&auto=format&fit=crop&q=80" alt="B7"></div><div class="bltag">SOLO TRAVEL</div><div class="blh">What it's actually like to be a solo woman in Bali</div><p class="blp">The honest answer I wish someone had given me before I came here the first time.</p><div class="blm">6 min · Dec 2024</div></div>
+      <div class="blc" onclick="go('post8')"><div class="bli"><img src="https://images.unsplash.com/photo-1555400038-63f5ba517a47?w=700&auto=format&fit=crop&q=80" alt="B8"></div><div class="bltag">CULTURE</div><div class="blh">The Bali I didn't expect — and why it changed everything</div><p class="blp">The ceremonies, the offerings, the people. The version of Bali that has nothing to do with Instagram.</p><div class="blm">9 min · Nov 2024</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ BLOG POSTS ═══ -->
+<div id="pg-post1" class="pg"><div class="phero"><div class="dbg" style="background-image:url('https://images.unsplash.com/photo-1553361371-9b22f78e8b1d?w=1400&auto=format&fit=crop&q=80');height:100%"></div><div class="dov" style="position:absolute;inset:0"></div><div style="position:relative;z-index:1;padding:2.5rem 3rem;display:flex;align-items:flex-end;height:100%"><button class="back" onclick="go('blog')">← Blog</button></div></div><div class="pwrap"><div class="bltag" style="margin-bottom:.7rem">HONEST TAKES</div><h1>Things I wish I knew before moving to Bali</h1><div class="pmeta"><span>Andrea</span><span>·</span><span>June 2025</span><span>·</span><span>8 min read</span></div><p>I moved to Bali three years ago after a long weekend trip that basically short-circuited my brain. I flew home to Bucharest, handed in my notice, and started Googling "how to move to Bali." Here's what I learned.</p><h2>The traffic is actually insane</h2><p>The roads in southern Bali can turn a 3km journey into a 45-minute ordeal. Rent a scooter and learn to drive it confidently. Avoid Kuta. Live north of Canggu if you want any quality of life.</p><div class="pq">The best version of Bali is the one you find when you stop trying to see everything and just start living somewhere properly.</div><h2>Ubud is not Bali. Canggu is not Bali.</h2><p>The places most tourists visit are tourist infrastructure built on top of a deeply spiritual and complex culture. The real Bali is in the temple ceremonies at 5am, in the offerings on every doorstep, in the warmth of someone who offers you food anyway.</p><h2>It's cheaper than you think — until it isn't</h2><p>A warung meal costs €1.50. A brunch at a trendy café costs €25. Both exist in Bali. Know which Bali you're choosing.</p><h2>The spiritual element is not a performance</h2><p>Bali is a Hindu island. The religion permeates everything. Treat it that way and Bali will give you something very hard to find anywhere else.</p><div class="post-share"><p>Share this</p><button class="share-btn" onclick="this.textContent='Copied!'">Copy link</button><button class="share-btn">WhatsApp</button></div><div style="margin-top:1.5rem;display:flex;gap:1rem;flex-wrap:wrap"><button class="bp" onclick="go('blog')">← All stories</button><button class="bg" onclick="go('plan')">Plan my trip</button></div></div></div>
+
+<div id="pg-post2" class="pg"><div class="phero"><div class="dbg" style="background-image:url('https://images.unsplash.com/photo-1580655653885-65763b2597d1?w=1400&auto=format&fit=crop&q=80');height:100%"></div><div class="dov" style="position:absolute;inset:0"></div><div style="position:relative;z-index:1;padding:2.5rem 3rem;display:flex;align-items:flex-end;height:100%"><button class="back" onclick="go('blog')">← Blog</button></div></div><div class="pwrap"><div class="bltag" style="margin-bottom:.7rem">TOURIST TRAPS</div><h1>5 places in Bali I'd skip (and what to do instead)</h1><div class="pmeta"><span>Andrea</span><span>·</span><span>May 2025</span><span>·</span><span>6 min read</span></div><p>This is going to upset some people. But you came here for honesty, not validation.</p><h2>1. The Tegallalang Swing</h2><p>It's a swing over a rice terrace. You pay 150,000–400,000 rupiah for a photo that looks identical to 47 million others. Skip it. Walk along the actual rice terrace instead — free and genuinely beautiful.</p><h2>2. The Bali Floating Breakfast</h2><p>In reality: the pool is cold, the food gets wet, and you spend your whole time arranging it for the camera. Spend that money on actual breakfast at a proper café instead.</p><div class="pq">Bali's most overrated experiences exist almost entirely for Instagram. The most memorable ones exist almost entirely in real life.</div><h2>3. Kuta</h2><p>Overcrowded, noisy, mediocre. The only reason to go to Kuta is if you're catching an early flight. Land, sleep one night, leave the next morning.</p><h2>4. Mount Agung (unless very prepared)</h2><p>3,031 metres, active volcano. If you want a volcano sunrise, do Mount Batur instead — easier, cheaper, equally spectacular.</p><h2>5. Tanah Lot between 4–6pm</h2><p>Genuinely beautiful temple. Go at 7am instead. Completely different experience.</p><div class="post-share"><p>Share this</p><button class="share-btn" onclick="this.textContent='Copied!'">Copy link</button><button class="share-btn">WhatsApp</button></div><div style="margin-top:1.5rem;display:flex;gap:1rem;flex-wrap:wrap"><button class="bp" onclick="go('blog')">← All stories</button><button class="bg" onclick="go('places')">Find better places</button></div></div></div>
+
+<div id="pg-post3" class="pg"><div class="phero"><div class="dbg" style="background-image:url('https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=1400&auto=format&fit=crop&q=80');height:100%"></div><div class="dov" style="position:absolute;inset:0"></div><div style="position:relative;z-index:1;padding:2.5rem 3rem;display:flex;align-items:flex-end;height:100%"><button class="back" onclick="go('blog')">← Blog</button></div></div><div class="pwrap"><div class="bltag" style="margin-bottom:.7rem">MONEY</div><h1>Is Bali actually expensive? The honest breakdown.</h1><div class="pmeta"><span>Andrea</span><span>·</span><span>April 2025</span><span>·</span><span>5 min read</span></div><p>Short answer: it depends entirely on how you travel.</p><h2>Budget traveler — <span class="cur">€</span>30–45/day</h2><p>Entirely doable. Guesthouse €15–25/night, warungs (€1.50–3 per meal), scooter (€5–7/day). A warung nasi goreng with egg costs about €1.20.</p><h2>Mid-range — <span class="cur">€</span>80–150/day</h2><p>Nice hotel with pool (€60–120/night), good restaurants half the time, organized activities.</p><div class="pq">The expensive version of Bali and the cheap version exist on literally the same streets.</div><h2>Luxury — <span class="cur">€</span>250+/day</h2><p>Private villas, fine dining, private drivers. This version of Bali is actually excellent value versus similar luxury in Europe.</p><div class="post-share"><p>Share this</p><button class="share-btn" onclick="this.textContent='Copied!'">Copy link</button><button class="share-btn">WhatsApp</button></div><div style="margin-top:1.5rem;display:flex;gap:1rem;flex-wrap:wrap"><button class="bp" onclick="go('blog')">← All stories</button><button class="bg" onclick="go('tools')">Open currency converter</button></div></div></div>
+
+<div id="pg-post4" class="pg"><div class="phero"><div class="dbg" style="background-image:url('https://images.unsplash.com/photo-1571896349842-33c89424de2d?w=1400&auto=format&fit=crop&q=80');height:100%"></div><div class="dov" style="position:absolute;inset:0"></div><div style="position:relative;z-index:1;padding:2.5rem 3rem;display:flex;align-items:flex-end;height:100%"><button class="back" onclick="go('blog')">← Blog</button></div></div><div class="pwrap"><div class="bltag" style="margin-bottom:.7rem">HOTELS</div><h1>Where I'd stay if it was my first trip to Bali</h1><div class="pmeta"><span>Andrea</span><span>·</span><span>March 2025</span><span>·</span><span>7 min read</span></div><p>The question I get asked more than any other on WhatsApp. Here's my honest answer.</p><h2>First-timer, budget</h2><p>Stay in Ubud. Puri Garden Hotel — €35–55/night, clean, lovely staff, beautiful garden.</p><h2>First-timer, mid-range</h2><p>Bisma Eight in Ubud. Infinity pool over the rice fields, spectacular breakfast. From €130/night.</p><div class="pq">The hotel you choose sets the tone for the whole trip. Spending a bit more to get rice field views is always the right call.</div><h2>Couple, no budget concerns</h2><p>Komaneka at Bisma (Ubud) or Alila Villas Uluwatu (clifftop, private pools, Indian Ocean). Both exceptional.</p><div class="post-share"><p>Share this</p><button class="share-btn" onclick="this.textContent='Copied!'">Copy link</button><button class="share-btn">WhatsApp</button></div><div style="margin-top:1.5rem;display:flex;gap:1rem;flex-wrap:wrap"><button class="bp" onclick="go('hotels')">See all hotel picks</button><button class="bg" onclick="go('blog')">← All stories</button></div></div></div>
+
+<div id="pg-post5" class="pg"><div class="phero"><div class="dbg" style="background-image:url('https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?w=1400&auto=format&fit=crop&q=80');height:100%"></div><div class="dov" style="position:absolute;inset:0"></div><div style="position:relative;z-index:1;padding:2.5rem 3rem;display:flex;align-items:flex-end;height:100%"><button class="back" onclick="go('blog')">← Blog</button></div></div><div class="pwrap"><div class="bltag" style="margin-bottom:.7rem">CAFÉS</div><h1>My 12 favourite cafés in Bali (and why I keep going back)</h1><div class="pmeta"><span>Andrea</span><span>·</span><span>Feb 2025</span><span>·</span><span>10 min read</span></div><p>I work from cafés. I write this website from cafés. Here are the 12 I keep returning to.</p><h2>Ubud</h2><p><strong>Café Pomegranate</strong> — Rice field views, best cold brew in Bali.<br><br><strong>Seniman Coffee</strong> — Possibly the best espresso in Bali.<br><br><strong>Locavore To Go</strong> — The café arm of Locavore. The sandwiches are extraordinary.</p><h2>Canggu</h2><p><strong>Hungry Bird</strong> — My Canggu first stop every time.<br><br><strong>Betelnut Café</strong> — The original Canggu café in a rice field. Copied a hundred times, never bettered.<br><br><strong>Milk & Madu</strong> — Best breakfast menu in Canggu.</p><div class="pq">The café scene in Bali is genuinely world class. I've had better coffee in Ubud than in most European cities.</div><h2>Seminyak</h2><p><strong>Revolver Espresso</strong> — Hidden down a tiny alley. Incredible coffee, cool design.<br><br><strong>Bikini</strong> — Part café, part fashion boutique. Excellent smoothie bowls.</p><div class="post-share"><p>Share this</p><button class="share-btn" onclick="this.textContent='Copied!'">Copy link</button><button class="share-btn">WhatsApp</button></div><div style="margin-top:1.5rem;display:flex;gap:1rem;flex-wrap:wrap"><button class="bp" onclick="go('food')">See all food picks</button><button class="bg" onclick="go('blog')">← All stories</button></div></div></div>
+
+<div id="pg-post6" class="pg"><div class="phero"><div class="dbg" style="background-image:url('https://images.unsplash.com/photo-1529156069898-49953e39b3ac?w=1400&auto=format&fit=crop&q=80');height:100%"></div><div class="dov" style="position:absolute;inset:0"></div><div style="position:relative;z-index:1;padding:2.5rem 3rem;display:flex;align-items:flex-end;height:100%"><button class="back" onclick="go('blog')">← Blog</button></div></div><div class="pwrap"><div class="bltag" style="margin-bottom:.7rem">SUNSETS</div><h1>Best sunsets in Bali — ranked by someone who's seen a lot of them</h1><div class="pmeta"><span>Andrea</span><span>·</span><span>Jan 2025</span><span>·</span><span>4 min read</span></div><p>Three years of chasing Bali sunsets. Here's the ranking.</p><h2>1. Uluwatu during Kecak — The one</h2><p>70-metre cliff, 1,000-year-old temple, fire dancers performing as the sun drops into the Indian Ocean. The most beautiful thing I've seen in Bali. I've seen it 12 times. Never gets old.</p><h2>2. Seminyak Beach</h2><p>The long flat beach turns completely gold at sunset. Beach clubs, surfers, local kids playing football on the sand. Everyone silently experiencing the same thing together.</p><h2>3. From a rice field in Ubud</h2><p>Any rice field looking west as the light changes. The terraces glow. Fog rises. The sound is birds and wind and distant gamelan.</p><h2>4. Tanah Lot at 7am</h2><p>Go at 7am, before the tour buses. The temple in the mist is genuinely beautiful.</p><div class="post-share"><p>Share this</p><button class="share-btn" onclick="this.textContent='Copied!'">Copy link</button><button class="share-btn">WhatsApp</button></div><div style="margin-top:1.5rem;display:flex;gap:1rem;flex-wrap:wrap"><button class="bp" onclick="go('blog')">← All stories</button><button class="bg" onclick="go('uluwatu')">Plan Uluwatu visit</button></div></div></div>
+
+<div id="pg-post7" class="pg"><div class="phero"><div class="dbg" style="background-image:url('https://images.unsplash.com/photo-1537996194471-e657df975ab4?w=1400&auto=format&fit=crop&q=80');height:100%"></div><div class="dov" style="position:absolute;inset:0"></div><div style="position:relative;z-index:1;padding:2.5rem 3rem;display:flex;align-items:flex-end;height:100%"><button class="back" onclick="go('blog')">← Blog</button></div></div><div class="pwrap"><div class="bltag" style="margin-bottom:.7rem">SOLO TRAVEL</div><h1>What it's actually like to be a solo woman in Bali</h1><div class="pmeta"><span>Andrea</span><span>·</span><span>Dec 2024</span><span>·</span><span>6 min read</span></div><p>Is Bali safe for solo female travelers? Here is my completely honest answer after three years of living here.</p><h2>The safety question</h2><p>Yes. Genuinely. Bali is one of the safer destinations in Southeast Asia for solo women. The Balinese are warm, respectful, and genuinely helpful. In three years I have never felt unsafe. Not once.</p><div class="pq">Moving to Bali alone was the best decision I've made in my life. I am not the person I was before I came here. Bali changes you, and especially women who come alone.</div><h2>The social side</h2><p>Bali is extraordinarily easy to meet people in. The café and co-working culture in Canggu and Ubud means you'll naturally end up in conversation within hours of arriving.</p><h2>The things nobody tells you</h2><p>You will be a different person in Bali than you are at home. Women I've spoken to consistently describe it as a place where they felt permission to be exactly who they are.</p><div class="post-share"><p>Share this</p><button class="share-btn" onclick="this.textContent='Copied!'">Copy link</button><button class="share-btn">WhatsApp</button></div><div style="margin-top:1.5rem;display:flex;gap:1rem;flex-wrap:wrap"><button class="bp" onclick="go('blog')">← All stories</button><button class="bg" onclick="go('contact')">Ask Andrea anything</button></div></div></div>
+
+<div id="pg-post8" class="pg"><div class="phero"><div class="dbg" style="background-image:url('https://images.unsplash.com/photo-1555400038-63f5ba517a47?w=1400&auto=format&fit=crop&q=80');height:100%"></div><div class="dov" style="position:absolute;inset:0"></div><div style="position:relative;z-index:1;padding:2.5rem 3rem;display:flex;align-items:flex-end;height:100%"><button class="back" onclick="go('blog')">← Blog</button></div></div><div class="pwrap"><div class="bltag" style="margin-bottom:.7rem">CULTURE</div><h1>The Bali I didn't expect — and why it changed everything</h1><div class="pmeta"><span>Andrea</span><span>·</span><span>Nov 2024</span><span>·</span><span>9 min read</span></div><p>When I first planned my trip to Bali I was thinking: beaches, rice terraces, good coffee. What I wasn't expecting was to feel, within a week, that I was touching something ancient and alive.</p><h2>The offerings</h2><p>Every morning, the Balinese make canang sari — small woven offerings of banana leaf filled with flowers, rice, and incense. Placed everywhere: on doorsteps, at road junctions, in shops. Every. Single. Day. These aren't decorative. They aren't for tourists. They're a daily act of gratitude that has been happening in Bali for over a thousand years.</p><div class="pq">The Bali that changes you isn't the Bali in the photos. It's the Bali you find when you slow down enough to actually watch what's happening around you.</div><h2>The ceremonies</h2><p>I once stumbled into a cremation ceremony while trying to find a café. I watched for about an hour. Hundreds of people dressed in white and yellow, gamelan music, enormous paper towers being carried through the streets. Everyone was calm. Even joyful. I cried, and I had no idea why.</p><h2>What to do with this</h2><p>You don't need to become spiritual. You just need to slow down and pay attention. Put the phone down for ten minutes in a temple. Sit quietly in a rice field. The best of Bali reveals itself to the people who stop rushing.</p><div class="post-share"><p>Share this</p><button class="share-btn" onclick="this.textContent='Copied!'">Copy link</button><button class="share-btn">WhatsApp</button></div><div style="margin-top:1.5rem;display:flex;gap:1rem;flex-wrap:wrap"><button class="bp" onclick="go('blog')">← All stories</button><button class="bg" onclick="go('guide')">Read the Travel Guide</button></div></div></div>
+
+<!-- ═══ GALLERY ═══ -->
+<div id="pg-gallery" class="pg">
+  <div class="sec" style="padding-top:3rem">
+    <div class="eye">PHOTO GALLERY</div>
+    <h2 class="sh">Bali through Andrea's lens</h2>
+    <p class="sp">Three years of exploring every corner of this island. Click any photo to view full size.</p>
+    <div class="photo-grid">
+      <div class="photo-item tall" onclick="openLb('https://images.unsplash.com/photo-1555400038-63f5ba517a47?w=1200&auto=format&fit=crop&q=80','Rice terraces, Tegallalang · Ubud')"><img src="https://images.unsplash.com/photo-1555400038-63f5ba517a47?w=400&auto=format&fit=crop&q=80" alt="Rice terraces"></div>
+      <div class="photo-item" onclick="openLb('https://images.unsplash.com/photo-1537996194471-e657df975ab4?w=1200&auto=format&fit=crop&q=80','Uluwatu Temple at sunset')"><img src="https://images.unsplash.com/photo-1537996194471-e657df975ab4?w=400&auto=format&fit=crop&q=80" alt="Uluwatu"></div>
+      <div class="photo-item" onclick="openLb('https://images.unsplash.com/photo-1604928141064-207cea6f571f?w=1200&auto=format&fit=crop&q=80','Café in Canggu')"><img src="https://images.unsplash.com/photo-1604928141064-207cea6f571f?w=400&auto=format&fit=crop&q=80" alt="Canggu"></div>
+      <div class="photo-item wide" onclick="openLb('https://images.unsplash.com/photo-1518548419970-58e3b4079ab2?w=1400&auto=format&fit=crop&q=80','Nusa Penida, Kelingking Beach')"><img src="https://images.unsplash.com/photo-1518548419970-58e3b4079ab2?w=800&auto=format&fit=crop&q=80" alt="Nusa Penida"></div>
+      <div class="photo-item" onclick="openLb('https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?w=1200&auto=format&fit=crop&q=80','Coffee in Ubud')"><img src="https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?w=400&auto=format&fit=crop&q=80" alt="Coffee"></div>
+      <div class="photo-item" onclick="openLb('https://images.unsplash.com/photo-1563245372-f21724e3856d?w=1200&auto=format&fit=crop&q=80','Balinese food')"><img src="https://images.unsplash.com/photo-1563245372-f21724e3856d?w=400&auto=format&fit=crop&q=80" alt="Food"></div>
+      <div class="photo-item tall" onclick="openLb('https://images.unsplash.com/photo-1580655653885-65763b2597d1?w=1200&auto=format&fit=crop&q=80','Sidemen Valley')"><img src="https://images.unsplash.com/photo-1580655653885-65763b2597d1?w=400&auto=format&fit=crop&q=80" alt="Sidemen"></div>
+      <div class="photo-item" onclick="openLb('https://images.unsplash.com/photo-1609137144813-7d9921338f24?w=1200&auto=format&fit=crop&q=80','Sunset in Seminyak')"><img src="https://images.unsplash.com/photo-1609137144813-7d9921338f24?w=400&auto=format&fit=crop&q=80" alt="Sunset"></div>
+      <div class="photo-item" onclick="openLb('https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=1200&auto=format&fit=crop&q=80','Mountain view, Mount Batur')"><img src="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=400&auto=format&fit=crop&q=80" alt="Mt Batur"></div>
+      <div class="photo-item wide" onclick="openLb('https://images.unsplash.com/photo-1571896349842-33c89424de2d?w=1400&auto=format&fit=crop&q=80','Villa pool in Ubud')"><img src="https://images.unsplash.com/photo-1571896349842-33c89424de2d?w=800&auto=format&fit=crop&q=80" alt="Villa pool"></div>
+      <div class="photo-item" onclick="openLb('https://images.unsplash.com/photo-1553361371-9b22f78e8b1d?w=1200&auto=format&fit=crop&q=80','Amed black sand beach')"><img src="https://images.unsplash.com/photo-1553361371-9b22f78e8b1d?w=400&auto=format&fit=crop&q=80" alt="Amed"></div>
+      <div class="photo-item" onclick="openLb('https://images.unsplash.com/photo-1529156069898-49953e39b3ac?w=1200&auto=format&fit=crop&q=80','Portrait in Bali')"><img src="https://images.unsplash.com/photo-1529156069898-49953e39b3ac?w=400&auto=format&fit=crop&q=80" alt="Portrait"></div>
+    </div>
+    <div style="margin-top:2.5rem;text-align:center"><p style="font-size:.85rem;color:var(--muted);margin-bottom:1rem">Follow Andrea for daily photos from Bali</p><button class="bp">Follow @andreainbali on Instagram</button></div>
+  </div>
+</div>
+
+<!-- ═══ DRIVERS ═══ -->
+<div id="pg-drivers" class="pg">
+  <div class="sec" style="padding-top:3rem">
+    <div class="eye">PRIVATE DRIVERS</div><h2 class="sh">Drivers Andrea actually trusts</h2><p class="sp">Getting around Bali with a private driver is comfortable, safe, and often the most affordable way to explore. These are the drivers Andrea uses personally.</p>
+    <div style="background:var(--sand);border-radius:16px;padding:1.6rem;margin-bottom:2.5rem;font-size:.9rem;line-height:1.7;color:#3A3530">🚗 <strong>Why hire a driver?</strong> A full-day driver costs ~<span class="cur">€</span>35–50. For two people that's less than €25 each — often cheaper than two Grab trips and infinitely more comfortable. They wait for you, know where to park, speak English, and know all the shortcuts.</div>
+    <div class="cgrid">
+      <div class="rvc"><div class="rvb" style="padding:1.8rem"><div style="display:flex;align-items:center;gap:1rem;margin-bottom:1.2rem"><div style="width:52px;height:52px;border-radius:50%;background:var(--sand);display:flex;align-items:center;justify-content:center;font-size:1.4rem;flex-shrink:0">🚗</div><div><div style="font-family:var(--serif);font-size:1.05rem;font-weight:400">Made Artana</div><div style="font-size:.72rem;color:var(--sage);margin-top:.15rem">Ubud · 8 years experience</div></div></div><p class="rvp">Andrea's go-to for anything in and around Ubud. Knows every road, viewpoint, and parking spot. Excellent English and genuinely great company for a long day trip. No surprise fees.</p><div style="font-size:.83rem;color:var(--terra);font-weight:500;margin-bottom:.9rem"><span class="cur">€</span>40–50 full day</div><div style="display:flex;gap:.5rem;flex-wrap:wrap"><span style="background:var(--sand);font-size:.7rem;padding:.2rem .6rem;border-radius:100px;color:var(--muted)">Ubud temples</span><span style="background:var(--sand);font-size:.7rem;padding:.2rem .6rem;border-radius:100px;color:var(--muted)">Tegallalang</span><span style="background:var(--sand);font-size:.7rem;padding:.2rem .6rem;border-radius:100px;color:var(--muted)">Mt. Batur</span><span style="background:var(--sand);font-size:.7rem;padding:.2rem .6rem;border-radius:100px;color:var(--muted)">Sidemen</span></div></div></div>
+      <div class="rvc"><div class="rvb" style="padding:1.8rem"><div style="display:flex;align-items:center;gap:1rem;margin-bottom:1.2rem"><div style="width:52px;height:52px;border-radius:50%;background:var(--sand);display:flex;align-items:center;justify-content:center;font-size:1.4rem;flex-shrink:0">🚙</div><div><div style="font-family:var(--serif);font-size:1.05rem;font-weight:400">Wayan Suarma</div><div style="font-size:.72rem;color:var(--sage);margin-top:.15rem">South Bali · Airport transfers</div></div></div><p class="rvp">The most reliable airport transfer driver Andrea has found. Always on time, always has cold water in the car. Also great for full-day south Bali trips covering Uluwatu, Jimbaran, and Seminyak.</p><div style="font-size:.83rem;color:var(--terra);font-weight:500;margin-bottom:.9rem">Airport: <span class="cur">€</span>15–20 · Day: <span class="cur">€</span>40</div><div style="display:flex;gap:.5rem;flex-wrap:wrap"><span style="background:var(--sand);font-size:.7rem;padding:.2rem .6rem;border-radius:100px;color:var(--muted)">Airport transfer</span><span style="background:var(--sand);font-size:.7rem;padding:.2rem .6rem;border-radius:100px;color:var(--muted)">Uluwatu</span><span style="background:var(--sand);font-size:.7rem;padding:.2rem .6rem;border-radius:100px;color:var(--muted)">Jimbaran</span></div></div></div>
+      <div class="rvc"><div class="rvb" style="padding:1.8rem"><div style="display:flex;align-items:center;gap:1rem;margin-bottom:1.2rem"><div style="width:52px;height:52px;border-radius:50%;background:var(--sand);display:flex;align-items:center;justify-content:center;font-size:1.4rem;flex-shrink:0">🏎️</div><div><div style="font-family:var(--serif);font-size:1.05rem;font-weight:400">Ketut Suwitra</div><div style="font-size:.72rem;color:var(--sage);margin-top:.15rem">North & East Bali specialist</div></div></div><p class="rvp">If you want to do Amed, Lovina, or the north coast — routes most tourists skip — Ketut is your person. Born in Amed, knows the area better than anyone. Brilliant for multi-day trips.</p><div style="font-size:.83rem;color:var(--terra);font-weight:500;margin-bottom:.9rem"><span class="cur">€</span>50–65 for north/east routes</div><div style="display:flex;gap:.5rem;flex-wrap:wrap"><span style="background:var(--sand);font-size:.7rem;padding:.2rem .6rem;border-radius:100px;color:var(--muted)">Amed</span><span style="background:var(--sand);font-size:.7rem;padding:.2rem .6rem;border-radius:100px;color:var(--muted)">Lovina</span><span style="background:var(--sand);font-size:.7rem;padding:.2rem .6rem;border-radius:100px;color:var(--muted)">Munduk</span><span style="background:var(--sand);font-size:.7rem;padding:.2rem .6rem;border-radius:100px;color:var(--muted)">Sidemen</span></div></div></div>
+    </div>
+    <div style="background:var(--ink);border-radius:20px;padding:2.5rem;margin-top:2.5rem;text-align:center"><h3 style="font-family:var(--serif);font-size:1.5rem;color:var(--sand);font-weight:400;margin-bottom:.8rem">Need a driver recommendation?</h3><p style="color:rgba(247,243,238,.52);font-size:.9rem;margin-bottom:1.5rem">Tell Andrea where you're going and she'll connect you with the right driver directly.</p><button class="bgold" onclick="go('contact')">Ask Andrea on WhatsApp</button></div>
+  </div>
+</div>
+
+<!-- ═══ FAQ ═══ -->
+<div id="pg-faq" class="pg">
+  <div class="sec" style="padding-top:3rem">
+    <div class="eye">FAQ</div><h2 class="sh">Questions Andrea gets asked a lot</h2><p class="sp">The most common questions from her WhatsApp inbox, answered honestly.</p>
+    <ul class="faqlist">
+      <li class="faq" onclick="this.classList.toggle('open')"><div class="faq-q">Is Bali safe for solo female travelers? <span class="farr">↓</span></div><div class="faq-a">Yes, genuinely. I moved here as a solo woman and have never felt unsafe. The Balinese are warm and respectful. Take normal precautions — use Grab rather than walking alone late at night. But overall Bali is one of the safer destinations in Southeast Asia for solo women.</div></li>
+      <li class="faq" onclick="this.classList.toggle('open')"><div class="faq-q">What's the best time of year to visit Bali? <span class="farr">↓</span></div><div class="faq-a">May to October is dry season — best weather, least rain. July and August are peak season. November to April is wet season — cheaper, fewer tourists. My personal favourite: September/October.</div></li>
+      <li class="faq" onclick="this.classList.toggle('open')"><div class="faq-q">Do I need to speak Indonesian? <span class="farr">↓</span></div><div class="faq-a">No. English is widely spoken in tourist areas. Learning a few words goes a long way — "terima kasih" (thank you) and "selamat pagi" (good morning) will get you big smiles everywhere.</div></li>
+      <li class="faq" onclick="this.classList.toggle('open')"><div class="faq-q">Should I rent a scooter? <span class="farr">↓</span></div><div class="faq-a">If you're comfortable on a scooter and have experience — absolutely yes. It's the best and most flexible way to explore. ~€5–7/day. If you've never ridden one, don't learn in Bali traffic. Hire a driver instead.</div></li>
+      <li class="faq" onclick="this.classList.toggle('open')"><div class="faq-q">Is tap water safe to drink? <span class="farr">↓</span></div><div class="faq-a">No. Never drink tap water in Bali. Use bottled water or refill stations. Buy a reusable bottle and refill it — Bali has a serious plastic problem and every bit helps.</div></li>
+      <li class="faq" onclick="this.classList.toggle('open')"><div class="faq-q">How much cash should I bring? <span class="farr">↓</span></div><div class="faq-a">ATMs are everywhere in tourist areas. BCA and Mandiri ATMs have the best rates. Avoid airport currency exchange — rates are terrible. Have the equivalent of €100–150 in rupiah on you at all times. Small warungs, local markets, and scooter rental shops are still cash-only.</div></li>
+      <li class="faq" onclick="this.classList.toggle('open')"><div class="faq-q">Can I use Uber or Lyft in Bali? <span class="farr">↓</span></div><div class="faq-a">No Uber or Lyft. Use Grab — works exactly the same way and is reliable in all tourist areas. Gojek is the Indonesian equivalent and also works well. In more remote areas like Amed or Sidemen, hire a local driver.</div></li>
+      <li class="faq" onclick="this.classList.toggle('open')"><div class="faq-q">What should I wear at temples? <span class="farr">↓</span></div><div class="faq-a">Cover shoulders and knees. Most temples provide sarongs at the entrance. You'll also need a sash tied around your waist — always provided. Just accept the sarong at the gate.</div></li>
+      <li class="faq" onclick="this.classList.toggle('open')"><div class="faq-q">How do I get from Bali to Nusa Penida? <span class="farr">↓</span></div><div class="faq-a">Fast boat from Sanur Beach. Maruti Express and Seagull Fast Cruise are reliable. Takes about 45 minutes. Costs around IDR 150,000 (≈ €9) each way. Boats run from early morning to mid-afternoon.</div></li>
+      <li class="faq" onclick="this.classList.toggle('open')"><div class="faq-q">What's Andrea's honest opinion of Kuta? <span class="farr">↓</span></div><div class="faq-a">I don't recommend it. Kuta was Bali's first tourist area and it shows — overcrowded, noisy, mediocre. The only reason to go to Kuta is if you're catching an early flight. Land, sleep one night, leave the next morning.</div></li>
+      <li class="faq" onclick="this.classList.toggle('open')"><div class="faq-q">How many days do I need in Bali? <span class="farr">↓</span></div><div class="faq-a">Minimum 7 days to actually see and feel Bali properly. 10 days if you want to add Nusa Penida. 2 weeks if you want to go north. Don't try to see everything — pick 2-3 areas and go deep.</div></li>
+      <li class="faq" onclick="this.classList.toggle('open')"><div class="faq-q">Is it rude to bargain in Bali? <span class="farr">↓</span></div><div class="faq-a">At markets and street vendors — bargaining is expected and completely normal. Start at about 50–60% of the asking price. At restaurants, spas, hotels, and tour operators — don't bargain. Prices are fixed. Know where you are.</div></li>
+    </ul>
+    <div style="margin-top:3rem;background:var(--sand);border-radius:16px;padding:2rem;text-align:center"><p style="font-size:.95rem;color:#3A3530;margin-bottom:1.2rem">Still have a question? Andrea reads every message.</p><button class="bp" onclick="go('contact')">Ask Andrea directly</button></div>
+  </div>
+</div>
+
+<!-- ═══ CONTACT ═══ -->
+<div id="pg-contact" class="pg">
+  <div class="cwrap" style="padding-top:3rem">
+    <div class="eye">CONTACT</div>
+    <h1>Talk to Andrea</h1>
+    <p style="color:var(--muted);line-height:1.75;margin-bottom:2.5rem;font-size:.95rem">She reads every message. She might not reply instantly — she's usually at a café somewhere — but she always replies.</p>
+    <div class="copts">
+      <div class="co"><div class="coico">💬</div><h3>WhatsApp</h3><p>Fastest way to reach Andrea. Great for quick questions, driver bookings, and personalised trip advice.</p></div>
+      <div class="co"><div class="coico">📸</div><h3>Instagram</h3><p>@andreainbali — DMs always open. She posts daily stories from around the island.</p></div>
+    </div>
+    <div style="background:var(--white);border:1px solid var(--border);border-radius:20px;padding:2.2rem">
+      <h3 style="font-size:.78rem;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-bottom:1.5rem">Or send a message</h3>
+      <div class="ff"><label>Your name</label><input type="text" placeholder="What should Andrea call you?"></div>
+      <div class="ff"><label>Email</label><input type="email" placeholder="your@email.com"></div>
+      <div class="ff"><label>Where are you from?</label><input type="text" placeholder="Your city or country..."></div>
+      <div class="ff"><label>What's this about?</label><select><option>Planning a trip to Bali</option><option>Hotel recommendations</option><option>Driver booking</option><option>Restaurant recommendations</option><option>I'm thinking of moving to Bali</option><option>A specific question</option><option>Something else</option></select></div>
+      <div class="ff"><label>Trip dates (if applicable)</label><input type="text" placeholder="e.g. 15–25 September 2025"></div>
+      <div class="ff"><label>Your message</label><textarea placeholder="Be specific — Andrea loves a specific question. Tell her when you're going, how long, who you're with, what your budget is..."></textarea></div>
+      <button class="bp" onclick="subF()">Send message →</button>
+      <div class="fsuc" id="fsuc">✓ Message sent! Andrea will get back to you within 24 hours — usually much faster.</div>
+    </div>
+  </div>
+</div>
+
+<!-- WA BUTTON -->
+<button class="wa" title="WhatsApp Andrea"><svg viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg></button>
+
+<!-- MOBILE NAV -->
+<nav class="mnav">
+  <div class="minner">
+    <button class="mni on" id="mn-home" onclick="go('home');mob('mn-home')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg><span>Home</span></button>
+    <button class="mni" id="mn-places" onclick="go('places');mob('mn-places')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg><span>Places</span></button>
+    <button class="mni" id="mn-gems" onclick="go('gems');mob('mn-gems')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg><span>Gems</span></button>
+    <button class="mni" id="mn-plan" onclick="go('plan');mob('mn-plan')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg><span>Plan</span></button>
+    <button class="mni" id="mn-more" onclick="go('faq');mob('mn-more')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg><span>More</span></button>
+  </div>
+</nav>
+
+</div><!-- end #app -->
+
+<script>
+// ═══ LOCALE DATA ═══
+const LD={
+  ro:{badge:'🇷🇴 RO',cur:'€',title:'Nu e un alt site de travel.',sub:'Doar Bali, prin ochii Andreei.',andTitle:'Bună, eu sunt Andrea.',andBio:'<p>M-am născut și am crescut în România și acum locuiesc în Bali. Când am venit prima dată, <span class="hl">am greșit absolut tot</span>. Am vizitat locuri supraevaluate. Am plătit mult prea mult. Am ratat locuri ascunse incredibile.</p><p>Acest site este tot ce mi-aș fi dorit să știu înainte de primul trip. Dacă nu l-aș recomanda celor mai buni prieteni ai mei, nu are ce căuta pe acest site.</p>',pSub:'Fiecare destinație aleasă personal. Nicio capcană turistică.',curLbl:'EUR (€)',ahd:'Din București în Bali',ads:'O fată din România care s-a îndrăgostit complet de o insulă tropicală.',ap1:'Aveam 27 de ani când am aterizat prima oară în Bali. Am rezervat o săptămână din impuls. Nu m-am mai întors acasă.',ape:'Tot ce e pe acest site l-am experimentat personal. Dacă nu l-aș recomanda celui mai bun prieten, nu există pe această pagină.',stat:'Locuri Recenzate',season:'✦ Sezon uscat — Moment perfect pentru vizită'},
+  hu:{badge:'🇭🇺 HU',cur:'€',title:'Ez nem egy szokásos utazási oldal.',sub:'Csak Bali, Andrea szemén keresztül.',andTitle:'Szia, Andrea vagyok.',andBio:'<p>Magyar gyökereim vannak és most Balin élek. Amikor először jöttem ide, <span class="hl">minden lehetséges hibát elkövettem</span>. Túlértékelt helyeket látogattam. Sokat fizettem. Csodálatos rejtett helyszíneket hagytam ki.</p><p>Ez a weboldal minden, amit szerettem volna tudni az első utam előtt. Ha nem ajánlanám a legjobb barátaimnak, nincs helye ezen az oldalon.</p>',pSub:'Minden célállomás kézzel válogatva. Turistacsapdák nélkül.',curLbl:'EUR (€)',ahd:'Budapesttől Baliig',ads:'Magyar gyökerű lány, aki belezúgott egy trópusi szigetbe.',ap1:'27 éves voltam, amikor először szálltam le Balin. Egyhetes nyaralást foglaltam spontánból. Nem jöttem vissza.',ape:'Minden, ami ezen az oldalon van, személyesen megtapasztaltam.',stat:'Felülvizsgált helyek',season:'✦ Száraz évszak — Tökéletes időpont látogatásra'},
+  int:{badge:'🌍 EN',cur:'$',title:'Not another travel website.',sub:"Just Bali, through Andrea's eyes.",andTitle:"Hi, I'm Andrea.",andBio:"<p>I'm originally from Romania with Hungarian roots and now I live in Bali. When I first came here, I made <span class='hl'>every mistake possible</span>. Visited overrated places. Paid too much. Missed amazing hidden spots.</p><p>This website is everything I wish I'd known before moving here. If I wouldn't recommend it to my closest friends, it doesn't belong here.</p>",pSub:"Every destination hand-picked. No tourist traps. Just the places Andrea actually loves.",curLbl:'USD ($)',ahd:'From Bucharest to Bali',ads:"A Romanian girl who fell head over heels for a tropical island.",ap1:"I was 27 when I first landed in Bali. I'd booked a one-week holiday on impulse. I figured I'd tick it off the bucket list and go back to my normal life. That's not what happened.",ape:"Everything on this site I've personally experienced. If I wouldn't recommend it to my best friend, it doesn't exist here. That's the deal.",stat:'Places Reviewed',season:'✦ Dry Season — Perfect Time to Visit'}
+};
+
+let loc=localStorage.getItem('aib_l')||null;
+
+function setLoc(l){
+  localStorage.setItem('aib_l',l);loc=l;
+  applyLoc(l);
+  document.getElementById('locale').classList.add('gone');
+  document.getElementById('nav').style.display='flex';
+  document.getElementById('app').style.display='block';
+  buildOpenNow();setSeason();convertCurrency();
+}
+
+function applyLoc(l){
+  const d=LD[l]||LD.int;
+  const s=(id,v,h)=>{const e=document.getElementById(id);if(e){if(h)e.innerHTML=v;else e.textContent=v}};
+  s('lbadge',d.badge);setCur(d.cur);
+  s('h-title',d.title);s('h-sub',d.sub);
+  s('and-title',d.andTitle);s('and-bio',d.andBio,true);
+  s('p-sub',d.pSub);s('cur-lbl',d.curLbl);
+  s('about-h1',d.ahd);s('about-ds',d.ads);s('about-p1',d.ap1);s('about-p-end',d.ape);
+  s('season-badge',d.season);
+  const sb=document.querySelectorAll('.sbl');if(sb[1])sb[1].textContent=d.stat;
+  updB(document.getElementById('bslider')?.value||100);
+  convertCurrency();
+}
+
+function setCur(c){document.querySelectorAll('.cur').forEach(e=>e.textContent=c)}
+function resetLoc(){localStorage.removeItem('aib_l');loc=null;document.getElementById('locale').classList.remove('gone')}
+
+// ═══ PAGES ═══
+const PGS=['home','about','places','ubud','uluwatu','canggu','nusa','seminyak','sidemen','amed','food','hotels','exp','guide','tools','plan','blog','post1','post2','post3','post4','post5','post6','post7','post8','gallery','drivers','faq','contact','gems'];
+
+function go(p){
+  PGS.forEach(id=>{const el=document.getElementById('pg-'+id);if(el)el.classList.remove('on')});
+  const t=document.getElementById('pg-'+p);if(t){t.classList.add('on');window.scrollTo({top:0,behavior:'smooth'})}
+  document.querySelectorAll('.nlinks a').forEach(a=>a.classList.remove('on'));
+  const na=document.getElementById('nl-'+p);if(na)na.classList.add('on');
+  closeSearch();
+}
+
+function mob(id){document.querySelectorAll('.mni').forEach(e=>e.classList.remove('on'));const el=document.getElementById(id);if(el)el.classList.add('on')}
+
+// ═══ TABS ═══
+function swt(btn,id){
+  btn.closest('.tabs').querySelectorAll('.tab').forEach(t=>t.classList.remove('on'));
+  btn.classList.add('on');
+  ['tt','te','ts'].forEach(i=>{const el=document.getElementById(i);if(el)el.style.display=i===id?'block':'none'});
+}
+
+// ═══ PLAN ═══
+function selO(el){el.closest('.ogrid').querySelectorAll('.opt').forEach(o=>o.classList.remove('on'));el.classList.add('on')}
+function selD(el){el.closest('.durrow').querySelectorAll('.dur').forEach(d=>d.classList.remove('on'));el.classList.add('on')}
+function updB(v){
+  const c=(LD[loc]||LD.int).cur;
+  const bv=document.getElementById('bval');if(bv)bv.innerHTML=`<span class="cur">${c}</span>${v}`;
+  const bh=document.getElementById('bhint');if(!bh)return;v=parseInt(v);
+  if(v<50)bh.textContent='Budget traveler · warungs, guesthouses, scooters';
+  else if(v<120)bh.textContent='Mid-range traveler · good hotels, local restaurants, activities';
+  else if(v<250)bh.textContent='Comfortable traveler · boutique hotels, nice dining, experiences';
+  else bh.textContent='Luxury traveler · private villas, fine dining, private drivers';
+}
+
+function genI(){
+  const dur=document.querySelector('.dur.on')?.textContent.trim()||'5 days';
+  const plans={
+    '3 days':[{d:'Day 1',t:'Arrive in Ubud',p:'Airport → Ubud. Check in, golden hour walk, warung dinner, early night.'},{d:'Day 2',t:'Ubud Essentials',p:'Tegallalang terraces before 8am. Brunch at Café Pomegranate. Campuhan Ridge Walk. Evening: Kecak fire dance at Uluwatu.'},{d:'Day 3',t:'Hidden Ubud + Depart',p:'Seniman Coffee morning. Scooter wander with no plan. Transfer to airport late afternoon.'}],
+    '5 days':[{d:'Day 1',t:'Arrive & Breathe',p:'Airport → Ubud. Check in, golden hour walk, warung dinner, early night.'},{d:'Day 2',t:'Ubud Classics',p:'Tegallalang before 8am. Café Pomegranate brunch. Tirta Empul holy water temple. Kecak fire dance.'},{d:'Day 3',t:'Into the Jungle',p:"Rent a scooter. Campuhan Ridge Walk. Find a random village. Eat somewhere with no English menu. That's when Bali clicks."},{d:'Day 4',t:'South Bali Day',p:'Uluwatu cliff temple. Padang Padang beach. Jimbaran seafood dinner on the beach at sunset.'},{d:'Day 5',t:'Beach + Goodbye',p:'Seminyak beach morning. Last coffee. Last nasi goreng. Small cry on the way to the airport. Completely normal.'}],
+    '7 days':[{d:'Day 1',t:'Arrive',p:'Land. Ubud. Breathe. Sleep.'},{d:'Day 2',t:'Ubud Temples & Coffee',p:'Tegallalang at sunrise. Seniman Coffee. Temple visit. Kecak dance.'},{d:'Day 3',t:'Explore Ubud',p:"Scooter, rice fields, local warungs. No plan. This is the day Bali makes sense."},{d:'Day 4',t:'Nusa Penida',p:"Fast boat from Sanur. Kelingking cliff. Angel's Billabong. Stay the night on the island."},{d:'Day 5',t:'Nusa Penida + Return',p:'Manta ray snorkeling at dawn. Afternoon boat back to Bali.'},{d:'Day 6',t:'South Bali Loop',p:'Uluwatu cliff temple, Padang Padang beach, Jimbaran sunset dinner on the beach.'},{d:'Day 7',t:'Slow Morning + Airport',p:'Seminyak beach, last coffee, last nasi goreng. Airport.'}],
+    '10 days':[{d:'Days 1–3',t:'Ubud Deep Dive',p:'Tegallalang, Tirta Empul, Campuhan Ridge, Kecak dance, cooking class, Seniman Coffee every morning.'},{d:'Days 4–5',t:'Nusa Penida',p:"Kelingking, Angel's Billabong, manta ray snorkeling. 2 nights minimum on the island."},{d:'Day 6',t:'Sidemen',p:'Most underrated valley in Bali. One night at a rice field guesthouse. Complete silence.'},{d:'Days 7–8',t:'South Bali',p:'Uluwatu, Padang Padang beach, Jimbaran dinner, one afternoon at a beach club in Seminyak.'},{d:'Day 9',t:'Canggu',p:'Beach day, coffee crawl, Echo Beach sunset.'},{d:'Day 10',t:'Final Morning',p:'Seminyak beach. Final coffee. Airport. The plane home feels surreal.'}],
+    '2 weeks+':[{d:'Week 1',t:'Ubud & Central Bali',p:'3 nights Ubud (temples, cooking class, rice terraces). 1 night Sidemen (hidden valley). 1 night Amed (black sand, diving).'},{d:'Week 2',t:'Island & South',p:"2 nights Nusa Penida (Kelingking, mantas, Angel's Billabong). 2 nights Seminyak (beach clubs, fine dining). 1 night Canggu."},{d:'Days 13–14',t:'North Bali',p:'Drive north: Lovina, Munduk, Mount Batur. A completely different, quieter Bali.'}]
+  };
+  const plan=plans[dur]||plans['5 days'];
+  document.getElementById('idays').innerHTML=plan.map(i=>`<div class="iday"><div class="idl">${i.d}</div><div><h4>${i.t}</h4><p>${i.p}</p></div></div>`).join('');
+  const box=document.getElementById('itinbox');box.style.display='block';
+  setTimeout(()=>box.scrollIntoView({behavior:'smooth',block:'start'}),100);
+}
+
+// ═══ SEARCH ═══
+const SD=[
+  {t:'Ubud',tp:'Destination',d:'Jungle, temples & rice terraces',img:'https://images.unsplash.com/photo-1555400038-63f5ba517a47?w=100&auto=format&fit=crop',p:'ubud'},
+  {t:'Uluwatu',tp:'Destination',d:'Clifftop temples & surf',img:'https://images.unsplash.com/photo-1537996194471-e657df975ab4?w=100&auto=format&fit=crop',p:'uluwatu'},
+  {t:'Canggu',tp:'Destination',d:'Cafés, nomads & vibes',img:'https://images.unsplash.com/photo-1604928141064-207cea6f571f?w=100&auto=format&fit=crop',p:'canggu'},
+  {t:'Nusa Penida',tp:'Destination',d:'Wild beaches & manta rays',img:'https://images.unsplash.com/photo-1518548419970-58e3b4079ab2?w=100&auto=format&fit=crop',p:'nusa'},
+  {t:'Seminyak',tp:'Destination',d:'Beach clubs & fine dining',img:'https://images.unsplash.com/photo-1609137144813-7d9921338f24?w=100&auto=format&fit=crop',p:'seminyak'},
+  {t:'Sidemen',tp:'Hidden Gem',d:'Most beautiful valley in Bali',img:'https://images.unsplash.com/photo-1580655653885-65763b2597d1?w=100&auto=format&fit=crop',p:'sidemen'},
+  {t:'Amed',tp:'Destination',d:'Black sand & shipwrecks',img:'https://images.unsplash.com/photo-1553361371-9b22f78e8b1d?w=100&auto=format&fit=crop',p:'amed'},
+  {t:'Hidden Gems',tp:'Page',d:'Secret spots most tourists never find',img:'https://images.unsplash.com/photo-1553361371-9b22f78e8b1d?w=100&auto=format&fit=crop',p:'gems'},
+  {t:'Café Pomegranate',tp:'Café · Ubud',d:'Best cold brew in Bali',img:'https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?w=100&auto=format&fit=crop',p:'food'},
+  {t:'Warung Babi Guling',tp:'Restaurant · Ubud',d:'Suckling pig rice',img:'https://images.unsplash.com/photo-1563245372-f21724e3856d?w=100&auto=format&fit=crop',p:'food'},
+  {t:'Merah Putih',tp:'Restaurant · Seminyak',d:'Fine Indonesian dining',img:'https://images.unsplash.com/photo-1537996194471-e657df975ab4?w=100&auto=format&fit=crop',p:'food'},
+  {t:'Komaneka at Bisma',tp:'Hotel · Ubud',d:'Luxury jungle hotel',img:'https://images.unsplash.com/photo-1571896349842-33c89424de2d?w=100&auto=format&fit=crop',p:'hotels'},
+  {t:'Mount Batur Trek',tp:'Experience',d:'Volcano sunrise hike',img:'https://images.unsplash.com/photo-1518548419970-58e3b4079ab2?w=100&auto=format&fit=crop',p:'exp'},
+  {t:'Plan My Trip',tp:'Feature',d:'Get a personalized itinerary',img:'https://images.unsplash.com/photo-1555400038-63f5ba517a47?w=100&auto=format&fit=crop',p:'plan'},
+  {t:'Travel Guide',tp:'Guide',d:'Everything practical',img:'https://images.unsplash.com/photo-1537996194471-e657df975ab4?w=100&auto=format&fit=crop',p:'guide'},
+  {t:'Currency Converter',tp:'Tool',d:'IDR exchange calculator',img:'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=100&auto=format&fit=crop',p:'tools'},
+  {t:'Packing List',tp:'Tool',d:'Interactive Bali packing checklist',img:'https://images.unsplash.com/photo-1529156069898-49953e39b3ac?w=100&auto=format&fit=crop',p:'tools'},
+  {t:'Photo Gallery',tp:'Gallery',d:"Bali through Andrea's lens",img:'https://images.unsplash.com/photo-1555400038-63f5ba517a47?w=100&auto=format&fit=crop',p:'gallery'},
+  {t:'Private Drivers',tp:'Service',d:'Trusted drivers Andrea uses',img:'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=100&auto=format&fit=crop',p:'drivers'},
+  {t:'FAQ',tp:'Help',d:'Most common questions answered',img:'https://images.unsplash.com/photo-1529156069898-49953e39b3ac?w=100&auto=format&fit=crop',p:'faq'}
+];
+
+function openSearch(){document.getElementById('sovl').classList.add('on');setTimeout(()=>document.getElementById('sinp').focus(),100)}
+function closeSearch(){document.getElementById('sovl').classList.remove('on')}
+function doSearch(q){
+  const r=document.getElementById('sresults');
+  if(!q||q.length<2){r.innerHTML='';return}
+  const res=SD.filter(d=>[d.t,d.tp,d.d].some(s=>s.toLowerCase().includes(q.toLowerCase()))).slice(0,7);
+  if(!res.length){r.innerHTML='<p style="color:var(--muted);font-size:.85rem;padding:.5rem 0">No results. Try something else.</p>';return}
+  r.innerHTML=res.map(d=>`<div class="sres" onclick="go('${d.p}');closeSearch()"><div class="sres-img"><img src="${d.img}" alt="${d.t}"></div><div class="sres-info"><div class="sres-tag">${d.tp}</div><h4>${d.t}</h4><p>${d.d}</p></div></div>`).join('');
+}
+document.addEventListener('keydown',e=>{if(e.key==='Escape')closeSearch()});
+
+// ═══ CURRENCY CONVERTER ═══
+const RATES={EUR:17000,USD:15800,GBP:20100,RON:3400,HUF:42};
+let fromCur='EUR';
+
+function setFromCur(c){
+  fromCur=c;
+  document.querySelectorAll('.cbtn').forEach(b=>{b.classList.remove('on');b.classList.add('off')});
+  const b=document.getElementById('btn-'+c);if(b){b.classList.add('on');b.classList.remove('off')}
+  const lbl=document.getElementById('conv-lbl');if(lbl)lbl.textContent=`Amount (${c})`;
+  convertCurrency();
+}
+
+function convertCurrency(){
+  const v=parseFloat(document.getElementById('conv-from')?.value)||0;
+  const rate=RATES[fromCur]||17000;
+  const idr=v*rate;
+  const toEl=document.getElementById('conv-to');
+  if(toEl)toEl.value=Math.round(idr).toLocaleString();
+  // Reference prices in IDR
+  const prices={warung:25000,coffee:35000,scooter:80000,massage:150000,hotel:500000,beer:25000};
+  const ids={warung:'r-warung',coffee:'r-coffee',scooter:'r-scooter',massage:'r-massage',hotel:'r-hotel',beer:'r-beer'};
+  const c=(LD[loc]||LD.int).cur;
+  Object.keys(prices).forEach(k=>{
+    const el=document.getElementById(ids[k]);
+    if(el){
+      const val=prices[k]/rate;
+      el.textContent=`${c}${val<10?val.toFixed(2):Math.round(val)}`;
+    }
+  });
+}
+
+// ═══ PACKING LIST ═══
+let totalItems=0,doneItems=0;
+function initPack(){
+  totalItems=document.querySelectorAll('.pack-item').length;
+  updPackProgress();
+}
+function togglePack(el){
+  el.classList.toggle('done');
+  doneItems=document.querySelectorAll('.pack-item.done').length;
+  updPackProgress();
+}
+function updPackProgress(){
+  const pct=totalItems?Math.round(doneItems/totalItems*100):0;
+  const pb=document.getElementById('pack-bar');if(pb)pb.style.width=pct+'%';
+  const pp=document.getElementById('pack-pct');if(pp)pp.textContent=pct+'%';
+  const pc=document.getElementById('pack-count');if(pc)pc.textContent=`${doneItems} of ${totalItems} items packed`;
+}
+function resetPack(){
+  document.querySelectorAll('.pack-item').forEach(el=>el.classList.remove('done'));
+  doneItems=0;updPackProgress();
+}
+
+// ═══ WHAT'S OPEN NOW ═══
+function buildOpenNow(){
+  const now=new Date();
+  const baliHour=(now.getUTCHours()+8)%24;
+  const items=[
+    {ico:'☕',name:'Café Pomegranate',sub:'Ubud · Rice field views',open:baliHour>=7&&baliHour<17,hours:'7am–5pm'},
+    {ico:'🏄',name:'Surf Lessons, Kuta Beach',sub:'Beginners welcome',open:baliHour>=6&&baliHour<16,hours:'6am–4pm'},
+    {ico:'🌿',name:'Campuhan Ridge Walk',sub:'Ubud · Free walk',open:baliHour>=5&&baliHour<18,hours:'Best 5am–8am'},
+    {ico:'🦋',name:'Monkey Forest',sub:'Ubud · Sacred sanctuary',open:baliHour>=8&&baliHour<18,hours:'8am–6pm'},
+    {ico:'🎭',name:'Kecak Dance, Uluwatu',sub:'Sunset · Fire dancers',open:baliHour>=17&&baliHour<20,hours:'~6pm sunset only'},
+    {ico:'🐠',name:'Manta Ray Snorkeling',sub:'Nusa Penida · Best at dawn',open:baliHour>=5&&baliHour<11,hours:'5am–11am'},
+    {ico:'🍜',name:'Babi Guling Warung',sub:'Ubud · Suckling pig',open:baliHour>=8&&baliHour<14,hours:'8am–2pm (sells out!)'},
+    {ico:'💆',name:'Spa & Massage',sub:'Ubud · Deep tissue',open:baliHour>=9&&baliHour<21,hours:'9am–9pm'}
+  ];
+  const g=document.getElementById('open-grid');
+  if(!g)return;
+  g.innerHTML=items.map(i=>`<div class="open-card"><div class="open-ico">${i.ico}</div><div class="open-info"><h4>${i.name}</h4><p>${i.sub}</p><span class="open-badge ${i.open?'yes':'no'}">${i.open?'Open now':'Closed now'} · ${i.hours}</span></div></div>`).join('');
+}
+
+// ═══ SEASON BADGE ═══
+function setSeason(){
+  const m=new Date().getMonth()+1;
+  const el=document.getElementById('season-badge');
+  const d=LD[loc]||LD.int;
+  if(el)el.textContent=d.season;
+  if(m>=5&&m<=10){if(el)el.textContent=d.season;}
+  else{if(el&&loc!=='ro'&&loc!=='hu')el.textContent='✦ Wet Season · Fewer Crowds · Lower Prices';}
+}
+
+// ═══ GALLERY LIGHTBOX ═══
+function openLb(src,cap){
+  document.getElementById('lb-img').src=src;
+  document.getElementById('lb-cap').textContent=cap;
+  document.getElementById('lb').classList.add('on');
+}
+function closeLb(){document.getElementById('lb').classList.remove('on')}
+
+// ═══ FORMS ═══
+function subNews(){
+  const e=document.getElementById('news-email');
+  if(e&&e.value){
+    const s=document.getElementById('newsuc');if(s)s.style.display='block';
+    e.value='';
+  }
+}
+function subF(){
+  const s=document.getElementById('fsuc');if(s)s.style.display='block';
+}
+
+// ═══ INIT ═══
+window.addEventListener('load',()=>{
+  initPack();
+  if(loc){
+    applyLoc(loc);
+    document.getElementById('locale').classList.add('gone');
+    document.getElementById('nav').style.display='flex';
+    document.getElementById('app').style.display='block';
+    buildOpenNow();setSeason();convertCurrency();
+  }
+});
+</script>
+</body>
+</html>
